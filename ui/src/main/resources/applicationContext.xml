@@ -4,8 +4,15 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <bean id="arrayBlockingQueueBean"
+          class="org.codex.exchangerbeans.ArrayBlockingQueueBean">
+    </bean>
+
     <bean id="clientBean"
           class="org.codex.client.ClientBean">
+        <constructor-arg ref="arrayBlockingQueueBean"/>
     </bean>
+
+
 
 </beans>

@@ -3,21 +3,29 @@ package org.codex.client;
 import org.fusesource.mqtt.client.*;
 
 import java.net.URISyntaxException;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 public class ClientBean extends Thread {
-    private String topic = "test";
-    private String ipAddress = "84.201.135.43";
-    private int port = 1883;
+    private String topic;
+    private String ipAddress;
+    private int port;
 
-    public ClientBean() {
+    private final BlockingQueue<String> send2ControllerQueue;
 
+    public ClientBean(BlockingQueue<String> send2ControllerQueue) {
+        /*this.ipAddress = "84.201.135.43";
+        this.port = 1883;
+        this.topic = "test";*/
+        this.ipAddress = "0.0.0.0";
+        this.port = 1;
+        this.topic = "test";
+        this.send2ControllerQueue = send2ControllerQueue;
     }
-    /*public ClientBean(String ipAddress, int port, String topic) {
-        this.ipAddress = ipAddress;
-        this.port = port;
-        this.topic = topic;
-    }*/
+
+    public BlockingQueue<String> getSend2ControllerQueue() {
+        return send2ControllerQueue;
+    }
 
     public String getTopic() {
         return topic;
@@ -42,6 +50,7 @@ public class ClientBean extends Thread {
     public void setPort(int port) {
         this.port = port;
     }
+
 
     @Override
     public void run() {
@@ -78,6 +87,7 @@ public class ClientBean extends Thread {
         Message msg;
         try {
             msg = connection.receive(1200, TimeUnit.MILLISECONDS);
+            send2ControllerQueue.put(new String(msg.getPayload()));
             System.out.println(new String(msg.getPayload()));
         } catch (Exception e) {
             e.printStackTrace();
