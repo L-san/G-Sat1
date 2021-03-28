@@ -1,31 +1,24 @@
-package ssau.spacegradient.ui;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.shape.Box;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.codex.client.Client;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import ssau.spacegradient.ui.clientapp.ClientAppService;
+public class ViewController {}
+/*@Component
+public class ViewController {
 
-@Component
-public class MainViewController {
     @FXML
     public Box box;
     public Label telemetryLabel;
     public TextField ipAddressTextField;
     public TextField portTextField;
     public Label connStatusLabel;
+    private Client client;
 
-    private ClientAppService clientAppService;
-
-    @Autowired
-    public MainViewController(ClientAppService clientAppService) {
-        this.clientAppService = clientAppService;
+    public ViewController(Client client) {
+        this.client = client;
     }
 
     @FXML
@@ -35,12 +28,11 @@ public class MainViewController {
         try {
             ip = ipAddressTextField.getText();
             port = Integer.parseInt(portTextField.getText());
-            clientAppService.connectServer(ip, port);
+            client.connectServer(ip, port);
         } catch (Exception ex) {
             connStatusLabel.setText(" Can't connect to " + ip + ":" + port);
         }
         connStatusLabel.setText(" Connected to " + ip + ":" + port);
-        telemetryLabel.setText(clientAppService.getMessage());
+        telemetryLabel.setText(client.getMessage());
     }
-
-}
+*/

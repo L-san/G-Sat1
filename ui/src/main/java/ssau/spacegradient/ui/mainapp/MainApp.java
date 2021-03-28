@@ -4,36 +4,27 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import ssau.spacegradient.ui.Main;
+import ssau.spacegradient.ui.StageReadyEvent;
 
 public class MainApp extends Application {
-    private ConfigurableApplicationContext applicationContext;
-
-    @Override
-    public void init() {
-        this.applicationContext = new SpringApplicationBuilder(Main.class).run();
-    }
-
+private ConfigurableApplicationContext applicationContext;
     @Override
     public void start(Stage stage) {
         applicationContext.publishEvent(new StageReadyEvent(stage));
     }
 
     @Override
-    public void stop() {
-        this.applicationContext.close();
-        Platform.exit();
+    public void init() {
+        applicationContext = new SpringApplicationBuilder(Main.class).run();
     }
 
-    static class StageReadyEvent extends ApplicationEvent{
-        public StageReadyEvent(Stage stage){
-            super(stage);
-        }
-
-        public Stage getStage() {
-            return (Stage) getSource();
-        }
+    @Override
+    public void stop() throws Exception {
+        applicationContext.close();
+        Platform.exit();
     }
 }

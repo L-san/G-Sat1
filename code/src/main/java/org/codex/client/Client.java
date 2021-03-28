@@ -1,19 +1,20 @@
 package org.codex.client;
 
 import org.fusesource.mqtt.client.*;
+import org.springframework.stereotype.Component;
 
 import java.net.URISyntaxException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-public class ClientBean extends Thread {
+public class Client extends Thread {
     private String topic;
     private String ipAddress;
     private int port;
 
     private final BlockingQueue<String> send2ControllerQueue;
 
-    public ClientBean(BlockingQueue<String> send2ControllerQueue) {
+    public Client(BlockingQueue<String> send2ControllerQueue) {
         /*this.ipAddress = "84.201.135.43";
         this.port = 1883;
         this.topic = "test";*/
