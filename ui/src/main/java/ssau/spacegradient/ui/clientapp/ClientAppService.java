@@ -8,12 +8,15 @@ import java.util.concurrent.BlockingQueue;
 
 @Service
 public class ClientAppService {
-    private final BlockingQueue<String> queue;
+    private BlockingQueue<String> queue;
     ClientAppService(){
+    }
+
+    public void connectServer(String ipAddress, int port) throws Exception{
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
         ClientBean clientBean = context.getBean("clientBean", ClientBean.class);
-        clientBean.setIpAddress("84.201.135.43");
-        clientBean.setPort(1883);
+        clientBean.setIpAddress(ipAddress);
+        clientBean.setPort(port);
         clientBean.setTopic("test");
         this.queue = clientBean.getSend2ControllerQueue();
         Thread clientThread = new Thread(clientBean);
@@ -21,6 +24,7 @@ public class ClientAppService {
         clientThread.start();
         context.close();
     }
+
     public String getMessage() throws InterruptedException {
         return queue.take();
     }

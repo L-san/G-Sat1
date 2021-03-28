@@ -1,4 +1,4 @@
-package ssau.spacegradient.ui.clientapp;
+package ssau.spacegradient.ui.mainapp;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -6,14 +6,14 @@ import javafx.stage.Stage;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ConfigurableApplicationContext;
-import ssau.spacegradient.ui.MainApp;
+import ssau.spacegradient.ui.Main;
 
-public class ClientApp extends Application {
+public class MainApp extends Application {
     private ConfigurableApplicationContext applicationContext;
 
     @Override
     public void init() {
-        this.applicationContext = new SpringApplicationBuilder(MainApp.class).run();
+        this.applicationContext = new SpringApplicationBuilder(Main.class).run();
     }
 
     @Override
