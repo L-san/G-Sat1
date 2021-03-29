@@ -86,7 +86,6 @@ public class Client extends Thread {
             e.printStackTrace();
             System.out.println("Failure: topic doesn't exist.");
         }
-        System.out.println("Subscribed to topics.");
 
         Message msg;
         try {

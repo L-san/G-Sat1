@@ -29,7 +29,7 @@ public class ClientController {
         client.setPort(port);
     }
 
-    public void start() {
+    public void start() throws IllegalArgumentException {
         clientThread = new Thread(client);
         clientThread.setDaemon(true);
         clientThread.start();

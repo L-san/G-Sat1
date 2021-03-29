@@ -48,67 +48,67 @@
 <?import javafx.scene.shape.Box?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="720.0" maxWidth="1280.0" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0"
-      xmlns="http://javafx.com/javafx/16"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="ViewController">
+<VBox maxHeight="720.0" maxWidth="1280.0" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ViewController">
     <MenuBar VBox.vgrow="NEVER">
         <Menu mnemonicParsing="false" text="Extras">
-            <MenuItem mnemonicParsing="false" text="Enable filter"/>
-            <MenuItem mnemonicParsing="false" text="Disable filter"/>
-            <SeparatorMenuItem mnemonicParsing="false"/>
-            <MenuItem mnemonicParsing="false" text="Transmit data"/>
-            <MenuItem mnemonicParsing="false" text="Stop transmitting data"/>
+            <MenuItem mnemonicParsing="false" text="Enable filter" />
+            <MenuItem mnemonicParsing="false" text="Disable filter" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Transmit data" />
+            <MenuItem mnemonicParsing="false" text="Stop transmitting data" />
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
-            <MenuItem mnemonicParsing="false" text="About"/>
+            <MenuItem mnemonicParsing="false" text="About" />
         </Menu>
     </MenuBar>
     <AnchorPane VBox.vgrow="ALWAYS">
-        <Box fx:id="box" depth="300.0" height="300.0" layoutX="635.0" layoutY="296.0" width="300.0"/>
+        <Box fx:id="box" depth="300.0" height="300.0" layoutX="635.0" layoutY="296.0" width="300.0" />
         <TabPane layoutX="-3.0" layoutY="523.0" prefHeight="171.0" prefWidth="407.0" tabClosingPolicy="UNAVAILABLE">
             <Tab text="Connection properties">
-                <SplitPane dividerPositions="0.4084507042253521" orientation="VERTICAL" prefHeight="200.0"
-                           prefWidth="160.0">
+                <SplitPane dividerPositions="0.4084507042253521" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="87.0" prefWidth="407.0">
-                        <Label layoutX="21.0" layoutY="16.0" prefHeight="25.0" prefWidth="23.0"
-                               text="IP ">
+                        <Label layoutX="21.0" layoutY="16.0" prefHeight="25.0" prefWidth="23.0" text="IP ">
                             <font>
-                                <Font size="14.0"/>
+                                <Font size="14.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="ipAddressTextField" layoutX="48.0" layoutY="16.0"
-                                   prefHeight="25.0" prefWidth="247.0"/>
+                        <TextField fx:id="ipAddressTextField" layoutX="48.0" layoutY="16.0" prefHeight="25.0" prefWidth="247.0" />
                     </AnchorPane>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="56.0" prefWidth="407.0">
                         <ButtonBar layoutX="3.0" layoutY="42.0" prefHeight="25.0" prefWidth="400.0">
                             <buttons>
-                                <Button mnemonicParsing="false"
-                                        text="Connect"/>
+                                <Button mnemonicParsing="false" onAction="#startConnection" text="Connect" />
                             </buttons>
                         </ButtonBar>
-                        <Label layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="34.0"
-                               text="port">
+                        <Label layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="34.0" text="port">
                             <font>
-                                <Font size="14.0"/>
+                                <Font size="14.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="portTextField" layoutX="48.0" layoutY="14.0"
-                                   prefHeight="25.0" prefWidth="247.0"/>
+                        <TextField fx:id="portTextField" layoutX="48.0" layoutY="14.0" prefHeight="25.0" prefWidth="247.0" />
                     </AnchorPane>
                 </SplitPane>
             </Tab>
-            <Tab text="Connection status">
-                <Label fx:id="connStatusLabel" prefHeight="42.0" prefWidth="112.0"
-                       text="   Disconnected..."/>
-            </Tab>
         </TabPane>
-        <TabPane layoutX="403.0" layoutY="523.0" prefHeight="171.0" prefWidth="508.0"
-                 tabClosingPolicy="UNAVAILABLE">
+        <TabPane layoutX="785.0" layoutY="523.0" prefHeight="138.0" prefWidth="495.0" tabClosingPolicy="UNAVAILABLE">
             <Tab text="Current telemetry">
-                <Label fx:id="telemetryLabel" prefHeight="47.0" prefWidth="503.0" text="No data..."/>
+                <Label fx:id="telemetryLabel" prefHeight="47.0" prefWidth="495.0" text="No data..." />
             </Tab>
-            <Tab text="Send telemetry to server"/>
+            <Tab text="Send telemetry to server" />
         </TabPane>
+      <TabPane layoutX="404.0" layoutY="523.0" prefHeight="171.0" prefWidth="383.0" tabClosingPolicy="UNAVAILABLE">
+         <tabs>
+            <Tab text="Connection status:">
+               <content>
+                      <Label fx:id="connStatusLabel" contentDisplay="CENTER" prefHeight="41.0" prefWidth="289.0" text="   Disconnected..." />
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+      <ButtonBar layoutX="771.0" layoutY="661.0" prefHeight="25.0" prefWidth="495.0">
+        <buttons>
+          <Button onAction="#startProcessing" fx:id="startProcessingButton" mnemonicParsing="false" text="Start processing" />
+        </buttons>
+      </ButtonBar>
     </AnchorPane>
 </VBox>

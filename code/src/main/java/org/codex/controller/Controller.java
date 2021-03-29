@@ -17,12 +17,12 @@ public class Controller {
         this.context = context;
     }
 
-    public void generateClient(String ip, int port){
+    public void generateClient(String ip, int port)throws IllegalArgumentException{
         this.clientController = context.getBean("clientController",ClientController.class);
         clientController.setClient(ip,port);
     }
 
-    public void start(){
+    public void start() throws IllegalArgumentException{
         clientController.start();
     }
 
