@@ -22,6 +22,10 @@ public class Controller {
         clientController.setClient(ip,port);
     }
 
+    public void start(){
+        clientController.start();
+    }
+
     public String receive() throws InterruptedException {
        return  clientController.receive();
     }

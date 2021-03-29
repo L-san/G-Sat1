@@ -1,17 +1,22 @@
 package org.codex.client;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+
 @Component("clientController")
 public class ClientController {
     private Client client;
     private Thread clientThread;
     private final BlockingQueue<String> rcvQueue;
 
-    ClientController(BlockingQueue<String> rcvQueue){
-        this.rcvQueue = rcvQueue;
+    @Autowired
+    ClientController(Client client) {
+        this.client = client;
+        this.rcvQueue = client.getRcvQueue();
     }
 
     public Client getClient() {
@@ -24,7 +29,7 @@ public class ClientController {
         client.setPort(port);
     }
 
-    public void start(){
+    public void start() {
         clientThread = new Thread(client);
         clientThread.setDaemon(true);
         clientThread.start();

@@ -1,31 +1,34 @@
 package org.codex.client;
 
 import org.fusesource.mqtt.client.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.net.URISyntaxException;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+@Component("client")
 public class Client extends Thread {
     private String topic;
     private String ipAddress;
     private int port;
+    private final BlockingQueue<String> rcvQueue;
 
-    private final BlockingQueue<String> send2ControllerQueue;
-
-    public Client(BlockingQueue<String> send2ControllerQueue) {
+    @Autowired
+    public Client(BlockingQueue<String> rcvQueue) {
         /*this.ipAddress = "84.201.135.43";
         this.port = 1883;
         this.topic = "test";*/
         this.ipAddress = "0.0.0.0";
         this.port = 1;
         this.topic = "test";
-        this.send2ControllerQueue = send2ControllerQueue;
+        this.rcvQueue = rcvQueue;
     }
 
-    public BlockingQueue<String> getSend2ControllerQueue() {
-        return send2ControllerQueue;
+    public BlockingQueue<String> getRcvQueue() {
+        return rcvQueue;
     }
 
     public String getTopic() {
@@ -88,8 +91,7 @@ public class Client extends Thread {
         Message msg;
         try {
             msg = connection.receive(1200, TimeUnit.MILLISECONDS);
-            send2ControllerQueue.put(new String(msg.getPayload()));
-            System.out.println(new String(msg.getPayload()));
+            rcvQueue.put(new String(msg.getPayload()));
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Failure: receiving has been failed");
