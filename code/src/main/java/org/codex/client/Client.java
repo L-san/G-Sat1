@@ -1,11 +1,13 @@
 package org.codex.client;
 
+import org.codex.client.converter.AbstractConverter;
+import org.codex.client.converter.DataContainer;
+import org.codex.client.converter.JsonConverter;
 import org.fusesource.mqtt.client.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.net.URISyntaxException;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
@@ -14,10 +16,11 @@ public class Client extends Thread {
     private String topic;
     private String ipAddress;
     private int port;
-    private final BlockingQueue<String> rcvQueue;
+    private final BlockingQueue<DataContainer> rcvQueue;
+    private AbstractConverter converter;
 
     @Autowired
-    public Client(BlockingQueue<String> rcvQueue) {
+    public Client(BlockingQueue<DataContainer> rcvQueue) {
         /*this.ipAddress = "84.201.135.43";
         this.port = 1883;
         this.topic = "test";*/
@@ -25,36 +28,28 @@ public class Client extends Thread {
         this.port = 1;
         this.topic = "test";
         this.rcvQueue = rcvQueue;
+        this.converter = new JsonConverter();
     }
 
-    public BlockingQueue<String> getRcvQueue() {
+    public BlockingQueue<DataContainer> getRcvQueue() {
         return rcvQueue;
-    }
-
-    public String getTopic() {
-        return topic;
     }
 
     public void setTopic(String topic) {
         this.topic = topic;
     }
 
-    public String getIpAddress() {
-        return ipAddress;
-    }
-
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
-    }
-
-    public int getPort() {
-        return port;
     }
 
     public void setPort(int port) {
         this.port = port;
     }
 
+    public void setConverter(AbstractConverter converter) {
+        this.converter = converter;
+    }
 
     @Override
     public void run() {
@@ -90,7 +85,7 @@ public class Client extends Thread {
         Message msg;
         try {
             msg = connection.receive(1200, TimeUnit.MILLISECONDS);
-            rcvQueue.put(new String(msg.getPayload()));
+            rcvQueue.put(converter.convert(new String(msg.getPayload())));
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Failure: receiving has been failed");

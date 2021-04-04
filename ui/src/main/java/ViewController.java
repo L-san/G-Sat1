@@ -1,12 +1,14 @@
+import javafx.animation.RotateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Point3D;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
-import org.codex.client.Client;
-import org.codex.client.ClientController;
 import org.codex.controller.Controller;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +29,17 @@ public class ViewController {
     }
 
     @FXML
-    public void startConnection(ActionEvent actionEvent) {
+    public void startConnection(MouseEvent mouseEvent) {
+        //todo где депенденси инжекшн емае
+        PhongMaterial phongMaterial = new PhongMaterial();
+        phongMaterial.setDiffuseColor(Color.POWDERBLUE);
+        box.setMaterial(phongMaterial);
+        RotateTransition rotate = new RotateTransition();
+        rotate.setByAngle(3.4699 * 180 / Math.PI);
+        rotate.setAxis(new Point3D(0.6966, 0.0540, 0.6966));
+        rotate.setNode(box);
+        rotate.play();
+        
         String ip = null;
         int port = 0;
         boolean isOk = true;
@@ -38,7 +50,7 @@ public class ViewController {
                 throw new IllegalArgumentException("Please, enter ip-address");
             }
             controller.generateClient(ip, port);
-            controller.start();
+            controller.startClient();
         } catch (Exception exception) {
             connStatusLabel.setText("Incorrect host address");
             isOk = false;
@@ -46,8 +58,14 @@ public class ViewController {
         if (isOk) connStatusLabel.setText("Connected to " + ip + ":" + port);
     }
 
-    public void startProcessing(ActionEvent actionEvent) throws InterruptedException {
-        telemetryLabel.setText(controller.receive());
+    public void startProcessing(MouseEvent mouseEvent) throws InterruptedException {
+        telemetryLabel.setText(controller.receive().toString());
+    }
+
+    public void stopProcessing(MouseEvent mouseEvent) {
+    }
+
+    public void stopConnection(MouseEvent mouseEvent) {
     }
 }
 

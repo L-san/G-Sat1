@@ -1,5 +1,6 @@
 package org.codex.client;
 
+import org.codex.client.converter.DataContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,7 @@ import java.util.concurrent.BlockingQueue;
 public class ClientController {
     private Client client;
     private Thread clientThread;
-    private final BlockingQueue<String> rcvQueue;
+    private final BlockingQueue<DataContainer> rcvQueue;
 
     @Autowired
     ClientController(Client client) {
@@ -35,7 +36,7 @@ public class ClientController {
         clientThread.start();
     }
 
-    public String receive() throws InterruptedException {
+    public DataContainer receive() throws InterruptedException {
         return rcvQueue.take();
     }
 }

@@ -32,8 +32,8 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -43,6 +43,9 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Box?>
@@ -57,6 +60,13 @@
             <MenuItem mnemonicParsing="false" text="Transmit data" />
             <MenuItem mnemonicParsing="false" text="Stop transmitting data" />
         </Menu>
+      <Menu mnemonicParsing="false" text="Data format">
+        <items>
+            <CheckMenuItem fx:id="jsonFormat" mnemonicParsing="false" text="JSON" />
+            <CheckMenuItem mnemonicParsing="false" text="XML" fx:id="xmlFormat" />
+            <CheckMenuItem fx:id="protobufFormat" mnemonicParsing="false" text="Protocol Buffers" />
+        </items>
+      </Menu>
         <Menu mnemonicParsing="false" text="Help">
             <MenuItem mnemonicParsing="false" text="About" />
         </Menu>
@@ -77,7 +87,10 @@
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="56.0" prefWidth="407.0">
                         <ButtonBar layoutX="3.0" layoutY="42.0" prefHeight="25.0" prefWidth="400.0">
                             <buttons>
-                                <Button mnemonicParsing="false" onAction="#startConnection" text="Connect" />
+                        <ToggleButton mnemonicParsing="false" onMousePressed="#startConnection" onMouseReleased="#stopConnection" text="Connect">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="Disconnected" />
+                           </toggleGroup></ToggleButton>
                             </buttons>
                         </ButtonBar>
                         <Label layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="34.0" text="port">
@@ -107,8 +120,74 @@
       </TabPane>
       <ButtonBar layoutX="771.0" layoutY="661.0" prefHeight="25.0" prefWidth="495.0">
         <buttons>
-          <Button onAction="#startProcessing" fx:id="startProcessingButton" mnemonicParsing="false" text="Start processing" />
+            <ToggleButton mnemonicParsing="false" onMousePressed="#startProcessing" onMouseReleased="#stopProcessing" text="Start processing" />
         </buttons>
       </ButtonBar>
+    <AnchorPane layoutX="131.0" layoutY="294.0" minHeight="0.0" minWidth="0.0" prefHeight="187.0" prefWidth="284.0" />
+      <TitledPane animated="false" layoutX="-115.0" layoutY="112.0" prefHeight="300.0" prefWidth="525.0" rotate="-90.0" text="Telemetry properties">
+         <content>
+            <SplitPane orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                     <children>
+                        <Label layoutX="470.0" layoutY="20.0" rotate="90.0" />
+                        <SplitPane dividerPositions="0.9424184261036468" layoutY="1.0" prefHeight="277.0" prefWidth="523.0">
+                          <items>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="275.0" prefWidth="492.0">
+                                 <children>
+                                    <TextField layoutX="391.0" layoutY="182.0" rotate="90.0" />
+                                    <Label layoutX="413.0" layoutY="41.0" prefHeight="31.0" prefWidth="110.0" rotate="90.0" text="Accelerometer, g" />
+                                    <TextField layoutX="361.0" layoutY="182.0" rotate="90.0" />
+                                    <Label layoutX="374.0" layoutY="47.0" prefHeight="31.0" prefWidth="124.0" rotate="90.0" text="Magnetometer, mGs" />
+                                    <TextField layoutX="330.0" layoutY="182.0" rotate="90.0" />
+                                    <Label layoutX="344.0" layoutY="48.0" prefHeight="31.0" prefWidth="124.0" rotate="90.0" text="Gyroscope, mdps" />
+                                    <SplitPane dividerPositions="0.8992805755395683" layoutX="-35.0" layoutY="-5.0" prefHeight="281.0" prefWidth="419.0">
+                                      <items>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                             <children>
+                                                <TextField layoutX="278.0" layoutY="186.0" rotate="90.0" />
+                                                <Label layoutX="297.0" layoutY="50.0" prefHeight="31.0" prefWidth="110.0" rotate="90.0" text="β" />
+                                                <TextField layoutX="247.0" layoutY="186.0" rotate="90.0" />
+                                                <Label layoutX="270.0" layoutY="49.0" prefHeight="31.0" prefWidth="110.0" rotate="90.0" text="ζ" />
+                                                <SplitPane dividerPositions="0.8473282442748091" layoutX="31.0" layoutY="4.0" prefHeight="276.0" prefWidth="264.0">
+                                                  <items>
+                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                                         <children>
+                                                            <TextField layoutX="124.0" layoutY="181.0" rotate="90.0" />
+                                                            <TextField layoutX="91.0" layoutY="181.0" rotate="90.0" />
+                                                            <Label layoutX="143.0" layoutY="40.0" prefHeight="31.0" prefWidth="110.0" rotate="90.0" text="Measurement noise" />
+                                                            <Label layoutX="111.0" layoutY="41.0" prefHeight="31.0" prefWidth="110.0" rotate="90.0" text="Process noise" />
+                                                         </children>
+                                                      </AnchorPane>
+                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                                         <children>
+                                                            <Label layoutX="-65.0" layoutY="74.0" prefHeight="25.0" prefWidth="161.0" rotate="90.0" text="Kalman filter gain coefficients" />
+                                                         </children>
+                                                      </AnchorPane>
+                                                  </items>
+                                                </SplitPane>
+                                             </children>
+                                          </AnchorPane>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="279.0" prefWidth="197.0">
+                                             <children>
+                                                <Label layoutX="-61.0" layoutY="74.0" prefHeight="25.0" prefWidth="161.0" rotate="90.0" text="Madgwick coefficients" />
+                                             </children>
+                                          </AnchorPane>
+                                      </items>
+                                    </SplitPane>
+                                 </children></AnchorPane>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="275.0" prefWidth="26.0">
+                                 <children>
+                                    <Label layoutX="-13.0" layoutY="21.0" prefHeight="25.0" prefWidth="57.0" rotate="90.0" text="units/LSB" />
+                                 </children>
+                              </AnchorPane>
+                          </items>
+                        </SplitPane>
+                     </children>
+                  </AnchorPane>
+              </items>
+            </SplitPane>
+         </content>
+      </TitledPane>
     </AnchorPane>
 </VBox>

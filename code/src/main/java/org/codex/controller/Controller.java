@@ -2,6 +2,7 @@ package org.codex.controller;
 
 import org.codex.client.Client;
 import org.codex.client.ClientController;
+import org.codex.client.converter.DataContainer;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -22,11 +23,11 @@ public class Controller {
         clientController.setClient(ip,port);
     }
 
-    public void start() throws IllegalArgumentException{
+    public void startClient() throws IllegalArgumentException{
         clientController.start();
     }
 
-    public String receive() throws InterruptedException {
+    public DataContainer receive() throws InterruptedException {
        return  clientController.receive();
     }
 
