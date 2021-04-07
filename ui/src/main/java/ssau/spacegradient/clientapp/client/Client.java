@@ -1,8 +1,8 @@
-package org.codex.client;
+package ssau.spacegradient.clientapp.client;
 
-import org.codex.client.converter.AbstractConverter;
-import org.codex.client.converter.DataContainer;
-import org.codex.client.converter.JsonConverter;
+import ssau.spacegradient.clientapp.client.converter.AbstractConverter;
+import ssau.spacegradient.clientapp.client.converter.DataContainer;
+import ssau.spacegradient.clientapp.client.converter.JsonConverter;
 import org.fusesource.mqtt.client.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,13 +11,14 @@ import java.net.URISyntaxException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-@Component("client")
+@Component
 public class Client extends Thread {
     private String topic;
     private String ipAddress;
     private int port;
     private final BlockingQueue<DataContainer> rcvQueue;
     private AbstractConverter converter;
+    private BlockingConnection connection;
 
     @Autowired
     public Client(BlockingQueue<DataContainer> rcvQueue) {
@@ -51,23 +52,20 @@ public class Client extends Thread {
         this.converter = converter;
     }
 
-    @Override
-    public void run() {
+    public void onRun(){
         MQTT mqtt = new MQTT();
         try {
             mqtt.setHost(ipAddress, port);
         } catch (URISyntaxException e) {
-            e.printStackTrace();
             System.out.println("Can't find host " + ipAddress + ":" + port);
         }
         //mqtt.setUserName("root");
         //mqtt.setPassword("root");
 
-        BlockingConnection connection = mqtt.blockingConnection();
+        connection = mqtt.blockingConnection();
         try {
             connection.connect();
         } catch (Exception e) {
-            e.printStackTrace();
             System.out.println("Can't connect to " + ipAddress + ":" + port);
         }
 
@@ -78,25 +76,30 @@ public class Client extends Thread {
         try {
             connection.subscribe(new Topic[]{new Topic(topic, QoS.EXACTLY_ONCE)});
         } catch (Exception e) {
-            e.printStackTrace();
             System.out.println("Failure: topic doesn't exist.");
         }
+    }
 
-        Message msg;
-        try {
-            msg = connection.receive(1200, TimeUnit.MILLISECONDS);
-            rcvQueue.put(converter.convert(new String(msg.getPayload())));
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Failure: receiving has been failed");
-        }
-
+    public void onExit(){
         try {
             connection.disconnect();
         } catch (Exception e) {
-            e.printStackTrace();
             System.out.println("Can't disconnect");
         }
     }
+
+    @Override
+    public void run() {
+        Message msg;
+        try {
+            onRun();
+            msg = connection.receive(1200, TimeUnit.MILLISECONDS);
+            rcvQueue.put(converter.convert(new String(msg.getPayload())));
+        } catch (Exception e) {
+            System.out.println("Failure: receiving has been failed");
+        }
+    }
+
+
 
 }

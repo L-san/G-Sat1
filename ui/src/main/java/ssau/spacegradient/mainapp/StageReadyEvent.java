@@ -1,4 +1,4 @@
-package ssau.spacegradient.ui;
+package ssau.spacegradient.mainapp;
 
 import javafx.stage.Stage;
 import org.springframework.context.ApplicationEvent;

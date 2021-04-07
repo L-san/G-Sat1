@@ -51,7 +51,10 @@
 <?import javafx.scene.shape.Box?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="720.0" maxWidth="1280.0" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ViewController">
+<VBox maxHeight="720.0" maxWidth="1280.0" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0"
+      xmlns="http://javafx.com/javafx/16"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="ssau.spacegradient.ViewController">
     <MenuBar VBox.vgrow="NEVER">
         <Menu mnemonicParsing="false" text="Extras">
             <MenuItem mnemonicParsing="false" text="Enable filter" />
@@ -105,89 +108,88 @@
         </TabPane>
         <TabPane layoutX="785.0" layoutY="523.0" prefHeight="138.0" prefWidth="495.0" tabClosingPolicy="UNAVAILABLE">
             <Tab text="Current telemetry">
-                <Label fx:id="telemetryLabel" prefHeight="47.0" prefWidth="495.0" text="No data..." />
+                <Label fx:id="telemetryLabel" alignment="TOP_LEFT" prefHeight="105.0" prefWidth="495.0" text="No data..." />
             </Tab>
             <Tab text="Send telemetry to server" />
         </TabPane>
-      <TabPane layoutX="404.0" layoutY="523.0" prefHeight="171.0" prefWidth="383.0" tabClosingPolicy="UNAVAILABLE">
-         <tabs>
+        <TabPane layoutX="404.0" layoutY="523.0" prefHeight="171.0" prefWidth="383.0" tabClosingPolicy="UNAVAILABLE">
             <Tab text="Connection status:">
-               <content>
-                      <Label fx:id="connStatusLabel" contentDisplay="CENTER" prefHeight="41.0" prefWidth="289.0" text="   Disconnected..." />
-               </content>
+                <Label fx:id="connStatusLabel" contentDisplay="CENTER" prefHeight="41.0" prefWidth="289.0"
+                       text="   Disconnected..."/>
             </Tab>
-         </tabs>
-      </TabPane>
+        </TabPane>
       <ButtonBar layoutX="771.0" layoutY="661.0" prefHeight="25.0" prefWidth="495.0">
         <buttons>
             <ToggleButton mnemonicParsing="false" onMousePressed="#startProcessing" onMouseReleased="#stopProcessing" text="Start processing" />
         </buttons>
       </ButtonBar>
     <AnchorPane layoutX="131.0" layoutY="294.0" minHeight="0.0" minWidth="0.0" prefHeight="187.0" prefWidth="284.0" />
-      <TitledPane animated="false" layoutX="-115.0" layoutY="112.0" prefHeight="300.0" prefWidth="525.0" rotate="-90.0" text="Telemetry properties">
-         <content>
+        <TitledPane animated="false" layoutX="-115.0" layoutY="112.0" prefHeight="300.0" prefWidth="525.0"
+                    rotate="-90.0" text="Telemetry properties">
             <SplitPane orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
-              <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                     <children>
-                        <Label layoutX="470.0" layoutY="20.0" rotate="90.0" />
-                        <SplitPane dividerPositions="0.9424184261036468" layoutY="1.0" prefHeight="277.0" prefWidth="523.0">
-                          <items>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="275.0" prefWidth="492.0">
-                                 <children>
-                                    <TextField layoutX="391.0" layoutY="182.0" rotate="90.0" />
-                                    <Label layoutX="413.0" layoutY="41.0" prefHeight="31.0" prefWidth="110.0" rotate="90.0" text="Accelerometer, g" />
-                                    <TextField layoutX="361.0" layoutY="182.0" rotate="90.0" />
-                                    <Label layoutX="374.0" layoutY="47.0" prefHeight="31.0" prefWidth="124.0" rotate="90.0" text="Magnetometer, mGs" />
-                                    <TextField layoutX="330.0" layoutY="182.0" rotate="90.0" />
-                                    <Label layoutX="344.0" layoutY="48.0" prefHeight="31.0" prefWidth="124.0" rotate="90.0" text="Gyroscope, mdps" />
-                                    <SplitPane dividerPositions="0.8992805755395683" layoutX="-35.0" layoutY="-5.0" prefHeight="281.0" prefWidth="419.0">
-                                      <items>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                                             <children>
-                                                <TextField layoutX="278.0" layoutY="186.0" rotate="90.0" />
-                                                <Label layoutX="297.0" layoutY="50.0" prefHeight="31.0" prefWidth="110.0" rotate="90.0" text="β" />
-                                                <TextField layoutX="247.0" layoutY="186.0" rotate="90.0" />
-                                                <Label layoutX="270.0" layoutY="49.0" prefHeight="31.0" prefWidth="110.0" rotate="90.0" text="ζ" />
-                                                <SplitPane dividerPositions="0.8473282442748091" layoutX="31.0" layoutY="4.0" prefHeight="276.0" prefWidth="264.0">
-                                                  <items>
-                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                                                         <children>
-                                                            <TextField layoutX="124.0" layoutY="181.0" rotate="90.0" />
-                                                            <TextField layoutX="91.0" layoutY="181.0" rotate="90.0" />
-                                                            <Label layoutX="143.0" layoutY="40.0" prefHeight="31.0" prefWidth="110.0" rotate="90.0" text="Measurement noise" />
-                                                            <Label layoutX="111.0" layoutY="41.0" prefHeight="31.0" prefWidth="110.0" rotate="90.0" text="Process noise" />
-                                                         </children>
-                                                      </AnchorPane>
-                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                                                         <children>
-                                                            <Label layoutX="-65.0" layoutY="74.0" prefHeight="25.0" prefWidth="161.0" rotate="90.0" text="Kalman filter gain coefficients" />
-                                                         </children>
-                                                      </AnchorPane>
-                                                  </items>
-                                                </SplitPane>
-                                             </children>
-                                          </AnchorPane>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="279.0" prefWidth="197.0">
-                                             <children>
-                                                <Label layoutX="-61.0" layoutY="74.0" prefHeight="25.0" prefWidth="161.0" rotate="90.0" text="Madgwick coefficients" />
-                                             </children>
-                                          </AnchorPane>
-                                      </items>
+                    <Label layoutX="470.0" layoutY="20.0" rotate="90.0"/>
+                    <SplitPane dividerPositions="0.9424184261036468" layoutY="1.0" prefHeight="277.0"
+                               prefWidth="523.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="275.0" prefWidth="492.0">
+                            <TextField layoutX="391.0" layoutY="182.0" rotate="90.0"/>
+                            <Label layoutX="413.0" layoutY="41.0" prefHeight="31.0" prefWidth="110.0"
+                                   rotate="90.0" text="Accelerometer, g"/>
+                            <TextField layoutX="361.0" layoutY="182.0" rotate="90.0"/>
+                            <Label layoutX="374.0" layoutY="47.0" prefHeight="31.0" prefWidth="124.0"
+                                   rotate="90.0" text="Magnetometer, mGs"/>
+                            <TextField layoutX="330.0" layoutY="182.0" rotate="90.0"/>
+                            <Label layoutX="344.0" layoutY="48.0" prefHeight="31.0" prefWidth="124.0"
+                                   rotate="90.0" text="Gyroscope, mdps"/>
+                            <SplitPane dividerPositions="0.8992805755395683" layoutX="-35.0" layoutY="-5.0"
+                                       prefHeight="281.0" prefWidth="419.0">
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0"
+                                            prefWidth="100.0">
+                                    <TextField layoutX="278.0" layoutY="186.0" rotate="90.0"/>
+                                    <Label layoutX="297.0" layoutY="50.0" prefHeight="31.0"
+                                           prefWidth="110.0" rotate="90.0" text="β"/>
+                                    <TextField layoutX="247.0" layoutY="186.0" rotate="90.0"/>
+                                    <Label layoutX="270.0" layoutY="49.0" prefHeight="31.0"
+                                           prefWidth="110.0" rotate="90.0" text="ζ"/>
+                                    <SplitPane dividerPositions="0.8473282442748091" layoutX="31.0"
+                                               layoutY="4.0" prefHeight="276.0" prefWidth="264.0">
+                                        <AnchorPane minHeight="0.0" minWidth="0.0"
+                                                    prefHeight="160.0" prefWidth="100.0">
+                                            <TextField layoutX="124.0" layoutY="181.0"
+                                                       rotate="90.0"/>
+                                            <TextField layoutX="91.0" layoutY="181.0"
+                                                       rotate="90.0"/>
+                                            <Label layoutX="143.0" layoutY="40.0"
+                                                   prefHeight="31.0" prefWidth="110.0"
+                                                   rotate="90.0" text="Measurement noise"/>
+                                            <Label layoutX="111.0" layoutY="41.0"
+                                                   prefHeight="31.0" prefWidth="110.0"
+                                                   rotate="90.0" text="Process noise"/>
+                                        </AnchorPane>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0"
+                                                    prefHeight="160.0" prefWidth="100.0">
+                                            <Label layoutX="-65.0" layoutY="74.0"
+                                                   prefHeight="25.0" prefWidth="161.0"
+                                                   rotate="90.0"
+                                                   text="Kalman filter gain coefficients"/>
+                                        </AnchorPane>
                                     </SplitPane>
-                                 </children></AnchorPane>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="275.0" prefWidth="26.0">
-                                 <children>
-                                    <Label layoutX="-13.0" layoutY="21.0" prefHeight="25.0" prefWidth="57.0" rotate="90.0" text="units/LSB" />
-                                 </children>
-                              </AnchorPane>
-                          </items>
-                        </SplitPane>
-                     </children>
-                  </AnchorPane>
-              </items>
+                                </AnchorPane>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="279.0"
+                                            prefWidth="197.0">
+                                    <Label layoutX="-61.0" layoutY="74.0" prefHeight="25.0"
+                                           prefWidth="161.0" rotate="90.0"
+                                           text="Madgwick coefficients"/>
+                                </AnchorPane>
+                            </SplitPane>
+                        </AnchorPane>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="275.0" prefWidth="26.0">
+                            <Label layoutX="-13.0" layoutY="21.0" prefHeight="25.0" prefWidth="57.0"
+                                   rotate="90.0" text="units/LSB"/>
+                        </AnchorPane>
+                    </SplitPane>
+                </AnchorPane>
             </SplitPane>
-         </content>
-      </TitledPane>
+        </TitledPane>
     </AnchorPane>
 </VBox>

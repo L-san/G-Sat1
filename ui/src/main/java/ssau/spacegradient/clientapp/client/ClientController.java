@@ -1,23 +1,22 @@
-package org.codex.client;
+package ssau.spacegradient.clientapp.client;
 
-import org.codex.client.converter.DataContainer;
+import ssau.spacegradient.clientapp.client.converter.DataContainer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-@Component("clientController")
+@Component
 public class ClientController {
     private Client client;
     private Thread clientThread;
     private final BlockingQueue<DataContainer> rcvQueue;
 
     @Autowired
-    ClientController(Client client) {
+    public ClientController(Client client) {
         this.client = client;
         this.rcvQueue = client.getRcvQueue();
+        System.out.println("i'm here");
     }
 
     public Client getClient() {
@@ -34,6 +33,10 @@ public class ClientController {
         clientThread = new Thread(client);
         clientThread.setDaemon(true);
         clientThread.start();
+    }
+
+    public void stop(){
+        client.onExit();
     }
 
     public DataContainer receive() throws InterruptedException {

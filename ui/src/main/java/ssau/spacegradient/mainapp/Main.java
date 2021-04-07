@@ -1,8 +1,8 @@
-package ssau.spacegradient.ui;
+package ssau.spacegradient.mainapp;
 
 import javafx.application.Application;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import ssau.spacegradient.ui.mainapp.MainApp;
+import ssau.spacegradient.mainapp.MainApp;
 
 @SpringBootApplication
 public class Main {

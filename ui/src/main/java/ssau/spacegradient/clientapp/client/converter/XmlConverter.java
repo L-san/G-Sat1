@@ -1,4 +1,4 @@
-package org.codex.client.converter;
+package ssau.spacegradient.clientapp.client.converter;
 
 public class XmlConverter extends AbstractConverter{
 

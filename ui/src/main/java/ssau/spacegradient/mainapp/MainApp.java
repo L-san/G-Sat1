@@ -1,17 +1,14 @@
-package ssau.spacegradient.ui.mainapp;
+package ssau.spacegradient.mainapp;
 
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import ssau.spacegradient.ui.Main;
-import ssau.spacegradient.ui.StageReadyEvent;
 
 public class MainApp extends Application {
 private ConfigurableApplicationContext applicationContext;
+
     @Override
     public void start(Stage stage) {
         applicationContext.publishEvent(new StageReadyEvent(stage));
@@ -23,7 +20,7 @@ private ConfigurableApplicationContext applicationContext;
     }
 
     @Override
-    public void stop() throws Exception {
+    public void stop(){
         applicationContext.close();
         Platform.exit();
     }
