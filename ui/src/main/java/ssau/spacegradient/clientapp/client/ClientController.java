@@ -16,7 +16,6 @@ public class ClientController {
     public ClientController(Client client) {
         this.client = client;
         this.rcvQueue = client.getRcvQueue();
-        System.out.println("i'm here");
     }
 
     public Client getClient() {

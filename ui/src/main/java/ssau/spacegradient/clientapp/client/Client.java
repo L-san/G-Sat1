@@ -27,7 +27,7 @@ public class Client extends Thread {
         this.topic = "test";*/
         this.ipAddress = "0.0.0.0";
         this.port = 1;
-        this.topic = "test";
+        this.topic = "json/realtime";
         this.rcvQueue = rcvQueue;
         this.converter = new JsonConverter();
     }
@@ -52,7 +52,7 @@ public class Client extends Thread {
         this.converter = converter;
     }
 
-    public void onRun(){
+    public void onRun() {
         MQTT mqtt = new MQTT();
         try {
             mqtt.setHost(ipAddress, port);
@@ -80,7 +80,7 @@ public class Client extends Thread {
         }
     }
 
-    public void onExit(){
+    public void onExit() {
         try {
             connection.disconnect();
         } catch (Exception e) {
@@ -91,15 +91,21 @@ public class Client extends Thread {
     @Override
     public void run() {
         Message msg;
+
         try {
             onRun();
-            msg = connection.receive(1200, TimeUnit.MILLISECONDS);
-            rcvQueue.put(converter.convert(new String(msg.getPayload())));
+            while (true) {
+                msg = connection.receive(1200, TimeUnit.MILLISECONDS);
+                rcvQueue.put(converter.convert(new String(msg.getPayload())));
+                Thread.sleep(1000);
+            }
+
         } catch (Exception e) {
             System.out.println("Failure: receiving has been failed");
+        } finally {
+            onExit();
         }
     }
-
 
 
 }
