@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 import ssau.spacegradient.clientapp.client.ClientController;
 import ssau.spacegradient.clientapp.client.converter.DataContainer;
 
+import java.util.function.Consumer;
+
 //управление клиентом
 //управление обработкой
 
@@ -22,15 +24,7 @@ public class Controller {
         clientController.setClient(ip, port);
     }
 
-    public void startClient() throws IllegalArgumentException {
-        clientController.start();
-    }
-
-    public void stopClient() {
-        clientController.stop();
-    }
-
-    public DataContainer receive() throws InterruptedException {
-        return clientController.receive();
+    public void startClient(Consumer<? super DataContainer> consumer) throws Exception {
+        clientController.start(consumer);
     }
 }

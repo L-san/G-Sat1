@@ -1,5 +1,6 @@
 package ssau.spacegradient.clientapp.client;
 
+import reactor.core.publisher.Flux;
 import ssau.spacegradient.clientapp.client.converter.AbstractConverter;
 import ssau.spacegradient.clientapp.client.converter.DataContainer;
 import ssau.spacegradient.clientapp.client.converter.JsonConverter;
@@ -10,30 +11,27 @@ import org.springframework.stereotype.Component;
 import java.net.URISyntaxException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 @Component
 public class Client extends Thread {
     private String topic;
     private String ipAddress;
     private int port;
-    private final BlockingQueue<DataContainer> rcvQueue;
     private AbstractConverter converter;
     private BlockingConnection connection;
+    private DataContainer data = new DataContainer();
+    private Consumer<? super DataContainer> consumer;
 
     @Autowired
-    public Client(BlockingQueue<DataContainer> rcvQueue) {
+    public Client() {
         /*this.ipAddress = "84.201.135.43";
         this.port = 1883;
         this.topic = "test";*/
         this.ipAddress = "0.0.0.0";
         this.port = 1;
         this.topic = "json/realtime";
-        this.rcvQueue = rcvQueue;
         this.converter = new JsonConverter();
-    }
-
-    public BlockingQueue<DataContainer> getRcvQueue() {
-        return rcvQueue;
     }
 
     public void setTopic(String topic) {
@@ -52,15 +50,20 @@ public class Client extends Thread {
         this.converter = converter;
     }
 
-    public void onRun() {
+    public void setConsumer(Consumer<? super DataContainer> consumer) {
+        this.consumer = consumer;
+    }
+
+
+    private void onStart() {
         MQTT mqtt = new MQTT();
         try {
             mqtt.setHost(ipAddress, port);
         } catch (URISyntaxException e) {
             System.out.println("Can't find host " + ipAddress + ":" + port);
         }
-        //mqtt.setUserName("root");
-        //mqtt.setPassword("root");
+//mqtt.setUserName("root");
+//mqtt.setPassword("root");
 
         connection = mqtt.blockingConnection();
         try {
@@ -69,10 +72,6 @@ public class Client extends Thread {
             System.out.println("Can't connect to " + ipAddress + ":" + port);
         }
 
-        /*String payload = "hey c:";
-        connection.publish("topic", payload.getBytes(), QoS.AT_MOST_ONCE, false);
-        System.out.println("Successfully published.");*/
-
         try {
             connection.subscribe(new Topic[]{new Topic(topic, QoS.EXACTLY_ONCE)});
         } catch (Exception e) {
@@ -80,32 +79,36 @@ public class Client extends Thread {
         }
     }
 
-    public void onExit() {
+    @Override
+    public void run() {
+        onStart();
+        while (true) {
+            Message msg = null;
+            try {
+                msg = connection.receive(1200, TimeUnit.MILLISECONDS);
+                data = converter.convert(new String(msg.getPayload()));
+                receive().subscribe(consumer);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
+
+    }
+
+   /* public void stop() {
         try {
             connection.disconnect();
         } catch (Exception e) {
             System.out.println("Can't disconnect");
         }
+    }*/
+
+    public Flux<DataContainer> receive() {
+        return Flux.fromArray(new DataContainer[]{data});
     }
 
-    @Override
-    public void run() {
-        Message msg;
-
-        try {
-            onRun();
-            while (true) {
-                msg = connection.receive(1200, TimeUnit.MILLISECONDS);
-                rcvQueue.put(converter.convert(new String(msg.getPayload())));
-                Thread.sleep(1000);
-            }
-
-        } catch (Exception e) {
-            System.out.println("Failure: receiving has been failed");
-        } finally {
-            onExit();
-        }
-    }
-
-
+    /*public DataContainer receive() throws Exception {
+        Message msg = connection.receive(1200, TimeUnit.MILLISECONDS);
+        return converter.convert(new String(msg.getPayload()));
+    }*/
 }

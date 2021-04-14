@@ -32,26 +32,10 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
-<?import javafx.scene.control.CheckMenuItem?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Box?>
 <?import javafx.scene.text.Font?>
-
 <VBox maxHeight="720.0" maxWidth="1280.0" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ssau.spacegradient.ViewController">
     <MenuBar VBox.vgrow="NEVER">
         <Menu mnemonicParsing="false" text="Extras">
@@ -61,13 +45,11 @@
             <MenuItem mnemonicParsing="false" text="Transmit data" />
             <MenuItem mnemonicParsing="false" text="Stop transmitting data" />
         </Menu>
-      <Menu mnemonicParsing="false" text="Data format">
-        <items>
-            <CheckMenuItem fx:id="jsonFormat" mnemonicParsing="false" text="JSON" />
-            <CheckMenuItem mnemonicParsing="false" text="XML" fx:id="xmlFormat" />
-            <CheckMenuItem fx:id="protobufFormat" mnemonicParsing="false" text="Protocol Buffers" />
-        </items>
-      </Menu>
+        <Menu mnemonicParsing="false" text="Data format">
+            <CheckMenuItem fx:id="jsonFormat" mnemonicParsing="false" text="JSON"/>
+            <CheckMenuItem mnemonicParsing="false" text="XML" fx:id="xmlFormat"/>
+            <CheckMenuItem fx:id="protobufFormat" mnemonicParsing="false" text="Protocol Buffers"/>
+        </Menu>
         <Menu mnemonicParsing="false" text="Help">
             <MenuItem mnemonicParsing="false" text="About" />
         </Menu>
@@ -89,9 +71,7 @@
                         <ButtonBar layoutX="3.0" layoutY="42.0" prefHeight="25.0" prefWidth="400.0">
                             <buttons>
                         <ToggleButton mnemonicParsing="false" onMousePressed="#startConnection" onMouseReleased="#stopConnection" text="Connect">
-                           <toggleGroup>
-                              <ToggleGroup fx:id="Disconnected" />
-                           </toggleGroup></ToggleButton>
+                           </ToggleButton>
                             </buttons>
                         </ButtonBar>
                         <Label layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="34.0" text="port">
@@ -117,7 +97,7 @@
         </TabPane>
       <ButtonBar layoutX="771.0" layoutY="661.0" prefHeight="25.0" prefWidth="495.0">
          <buttons>
-            <Button mnemonicParsing="false" onAction="#startProcessing" text="Start Processing" />
+            <ToggleButton id="startProcessingButton" mnemonicParsing="false" onAction="#startProcessing" text="Start Processing" />
          </buttons>
       </ButtonBar>
     <AnchorPane layoutX="131.0" layoutY="294.0" minHeight="0.0" minWidth="0.0" prefHeight="187.0" prefWidth="284.0" />

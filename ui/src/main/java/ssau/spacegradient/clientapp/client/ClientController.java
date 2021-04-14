@@ -1,21 +1,23 @@
 package ssau.spacegradient.clientapp.client;
 
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import reactor.core.publisher.Flux;
 import ssau.spacegradient.clientapp.client.converter.DataContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.BlockingQueue;
+import java.util.function.Consumer;
 
 @Component
-public class ClientController {
+public class ClientController  {
     private Client client;
-    private Thread clientThread;
-    private final BlockingQueue<DataContainer> rcvQueue;
 
     @Autowired
     public ClientController(Client client) {
         this.client = client;
-        this.rcvQueue = client.getRcvQueue();
     }
 
     public Client getClient() {
@@ -23,22 +25,14 @@ public class ClientController {
     }
 
     public void setClient(String ip, int port) {
-        this.client = new Client(rcvQueue);
         client.setIpAddress(ip);
         client.setPort(port);
     }
 
-    public void start() throws IllegalArgumentException {
-        clientThread = new Thread(client);
+    public  void start(Consumer<? super DataContainer> consumer) {
+        client.setConsumer(consumer);
+        Thread clientThread = new Thread(client);
         clientThread.setDaemon(true);
         clientThread.start();
-    }
-
-    public void stop(){
-        client.onExit();
-    }
-
-    public DataContainer receive() throws InterruptedException {
-        return rcvQueue.take();
     }
 }
