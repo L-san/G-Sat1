@@ -20,10 +20,9 @@ public class Client extends Thread {
     private int port;
     private AbstractConverter converter;
     private BlockingConnection connection;
-    private DataContainer data = new DataContainer();
     private Consumer<? super DataContainer> consumer;
+    private DataContainer data = new DataContainer();
 
-    @Autowired
     public Client() {
         /*this.ipAddress = "84.201.135.43";
         this.port = 1883;
@@ -53,7 +52,6 @@ public class Client extends Thread {
     public void setConsumer(Consumer<? super DataContainer> consumer) {
         this.consumer = consumer;
     }
-
 
     private void onStart() {
         MQTT mqtt = new MQTT();
@@ -92,23 +90,15 @@ public class Client extends Thread {
                 exception.printStackTrace();
             }
         }
-
     }
-
+    public Flux<DataContainer> receive() {
+        return Flux.fromArray(new DataContainer[]{data});
+    }
    /* public void stop() {
         try {
             connection.disconnect();
         } catch (Exception e) {
             System.out.println("Can't disconnect");
         }
-    }*/
-
-    public Flux<DataContainer> receive() {
-        return Flux.fromArray(new DataContainer[]{data});
-    }
-
-    /*public DataContainer receive() throws Exception {
-        Message msg = connection.receive(1200, TimeUnit.MILLISECONDS);
-        return converter.convert(new String(msg.getPayload()));
     }*/
 }

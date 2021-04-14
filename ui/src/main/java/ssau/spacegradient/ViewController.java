@@ -1,12 +1,12 @@
 package ssau.spacegradient;
 
+import javafx.animation.RotateTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckMenuItem;
+import javafx.geometry.Point3D;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -14,13 +14,13 @@ import javafx.scene.shape.Box;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
-import ssau.spacegradient.clientapp.Controller;
-import ssau.spacegradient.clientapp.client.converter.DataContainer;
+import ssau.spacegradient.dataprocessing.ProcessedData;
+import ssau.spacegradient.clientapp.client.Controller;
 
 import java.util.function.Consumer;
 
 @Component
-public class ViewController implements Consumer<DataContainer> {
+public class ViewController implements Consumer<ProcessedData> {
     private final Controller controller;
     @FXML
     public Box box;
@@ -32,10 +32,10 @@ public class ViewController implements Consumer<DataContainer> {
 
     public ViewController() {
         ApplicationContext context = new AnnotationConfigApplicationContext(
-                "ssau.spacegradient.clientapp.beans",
-                "ssau.spacegradient.clientapp.client",
-                "ssau.spacegradient.clientapp");
-        this.controller = context.getBean("controller", Controller.class);
+                "ssau.spacegradient.dataprocessing",
+                "ssau.spacegradient.mainapp",
+                "ssau.spacegradient.clientapp.client");
+        this.controller = context.getBean(Controller.class);
         // System.out.println("i'm here");
     }
 
@@ -62,7 +62,7 @@ public class ViewController implements Consumer<DataContainer> {
             }
             System.out.println(ip + " " + port);
             controller.generateClient(ip, port);
-            controller.startClient(this);
+            controller.startClient();
         } catch (Exception exception) {
             exception.printStackTrace();
             connStatusLabel.setText("Incorrect host address");
@@ -73,6 +73,7 @@ public class ViewController implements Consumer<DataContainer> {
 
     @FXML
     public void startProcessing(ActionEvent event) {
+        controller.startAlgorithm(this);
     }
 
 
@@ -82,9 +83,24 @@ public class ViewController implements Consumer<DataContainer> {
     }
 
     @Override
-    public void accept(DataContainer dataContainer) {
-        Platform.runLater(() -> telemetryLabel.setText(dataContainer.toString()));
+    public void accept(ProcessedData data) {
+        Platform.runLater(() -> {
+            telemetryLabel.setText(data.getRawData().toString());
+            double[] q = data.getQ();
+            double angle;
+            angle = 2 * Math.acos(q[0]);
+            Point3D rotationAxis = new Point3D(-q[2], q[3], q[1]);
+            rotateBox(angle * 180 / Math.PI, rotationAxis);
+            System.out.println(angle+" "+q[1]+" "+q[2]+" "+q[3]);
+        });
+    }
 
+    protected final void rotateBox(double angle, Point3D rotationAxis) {
+        RotateTransition rotate = new RotateTransition();
+        rotate.setByAngle(angle);
+        rotate.setAxis(rotationAxis);
+        rotate.setNode(this.box);
+        rotate.play();
     }
 }
 

@@ -1,9 +1,5 @@
 package ssau.spacegradient.clientapp.client;
 
-import javafx.application.Platform;
-import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import reactor.core.publisher.Flux;
 import ssau.spacegradient.clientapp.client.converter.DataContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,7 +25,7 @@ public class ClientController  {
         client.setPort(port);
     }
 
-    public  void start(Consumer<? super DataContainer> consumer) {
+    public void start(Consumer<? super DataContainer> consumer) {
         client.setConsumer(consumer);
         Thread clientThread = new Thread(client);
         clientThread.setDaemon(true);

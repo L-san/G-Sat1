@@ -1,21 +1,24 @@
 package ssau.spacegradient;
 
-//@Configuration
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import ssau.spacegradient.clientapp.client.Client;
+import ssau.spacegradient.clientapp.client.ClientController;
+import ssau.spacegradient.dataprocessing.AlgorithmController;
+import ssau.spacegradient.dataprocessing.Madgwick;
+import ssau.spacegradient.clientapp.client.Controller;
+
+@Configuration
 public class Config {
 
-   /* @Bean
-    public DataContainer getDataContainer(){
-        return new DataContainer();
+    @Bean
+    public Client getClient(){
+        return new Client();
     }
 
     @Bean
-    public BlockingQueueBean getBlockingQueueBean(){
-        return new BlockingQueueBean();
-    }
-
-    @Bean
-    public Client getClient(BlockingQueueBean bean){
-        return new Client(bean);
+    public Madgwick getMadgwick(){
+        return new Madgwick();
     }
 
     @Bean
@@ -23,8 +26,13 @@ public class Config {
         return new ClientController(client);
     }
 
-    @Bean("controller")
-    public Controller getController(ClientController controller){
-        return new Controller(controller);
-    }*/
+    @Bean
+    public AlgorithmController getAlgorithmController(Madgwick algorithm){
+        return new AlgorithmController(algorithm);
+    }
+
+    @Bean
+    public Controller getController(ClientController controller, AlgorithmController algorithmController){
+        return new Controller(controller,algorithmController);
+    }
 }
