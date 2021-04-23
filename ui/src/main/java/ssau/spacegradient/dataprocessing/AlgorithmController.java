@@ -7,7 +7,8 @@ import java.util.function.Consumer;
 
 @Component
 public class AlgorithmController {
-    private final Algorithm algorithm;
+    private final Madgwick algorithm;
+    private Thread algorithmThread;
 
     @Autowired
     public AlgorithmController(Madgwick algorithm) {
@@ -18,10 +19,15 @@ public class AlgorithmController {
         return algorithm;
     }
 
-    public void start(Consumer<? super ProcessedData> consumer) {
-        algorithm.setConsumer(consumer);
-        Thread algorithmThread = new Thread(algorithm);
-        algorithmThread.setDaemon(true);
-        algorithmThread.start();
+    public void start(Consumer<? super ProcessedData> consumer, MadgwickSettings set) {
+        this.algorithm.setConsumer(consumer);
+        this.algorithm.setSettings(set);
+        this.algorithmThread = new Thread(algorithm);
+        this.algorithmThread.setDaemon(true);
+        this.algorithmThread.start();
+    }
+
+    public void stop() {
+        this.algorithmThread.interrupt();
     }
 }

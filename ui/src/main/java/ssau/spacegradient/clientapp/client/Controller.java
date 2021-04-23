@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ssau.spacegradient.clientapp.client.ClientController;
 import ssau.spacegradient.dataprocessing.AlgorithmController;
+import ssau.spacegradient.dataprocessing.MadgwickSettings;
 import ssau.spacegradient.dataprocessing.ProcessedData;
 
 import java.util.function.Consumer;
@@ -30,7 +31,15 @@ public class Controller {
         clientController.start(algorithmController.getAlgorithm());
     }
 
-    public void startAlgorithm(Consumer<? super ProcessedData> consumer){
-        algorithmController.start(consumer);
+    public void stopClient(){
+        clientController.stop();
+    }
+
+    public void startAlgorithm(Consumer<? super ProcessedData> consumer, MadgwickSettings set){
+        algorithmController.start(consumer, set);
+    }
+
+    public void stopAlgorithm(){
+        algorithmController.stop();
     }
 }

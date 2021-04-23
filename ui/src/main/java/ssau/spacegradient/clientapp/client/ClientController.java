@@ -8,8 +8,9 @@ import java.util.concurrent.BlockingQueue;
 import java.util.function.Consumer;
 
 @Component
-public class ClientController  {
+public class ClientController {
     private Client client;
+    private Thread clientThread;
 
     @Autowired
     public ClientController(Client client) {
@@ -17,18 +18,22 @@ public class ClientController  {
     }
 
     public Client getClient() {
-        return client;
+        return this.client;
     }
 
     public void setClient(String ip, int port) {
-        client.setIpAddress(ip);
-        client.setPort(port);
+        this.client.setIpAddress(ip);
+        this.client.setPort(port);
     }
 
     public void start(Consumer<? super DataContainer> consumer) {
-        client.setConsumer(consumer);
-        Thread clientThread = new Thread(client);
-        clientThread.setDaemon(true);
-        clientThread.start();
+        this.client.setConsumer(consumer);
+        this.clientThread = new Thread(client);
+        this.clientThread.setDaemon(true);
+        this.clientThread.start();
+    }
+
+    public void stop() {
+        this.clientThread.interrupt();
     }
 }

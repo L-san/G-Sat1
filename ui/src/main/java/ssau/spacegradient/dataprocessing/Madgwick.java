@@ -1,27 +1,41 @@
 package ssau.spacegradient.dataprocessing;
 
+import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import ssau.spacegradient.clientapp.client.converter.DataContainer;
 
+import java.awt.*;
 import java.util.function.Consumer;
 
 @Component
 public class Madgwick implements Algorithm {
-    private final double zeta = 0;
-    private final double beta = 0;
-    private final double dt = 0.01;
-    private double[] q_est = new double[]{1,0,0,0};
+    private boolean isAlive = true;
+    private double zeta;
+    private double beta;
+    private double dt;
+    private double accelerometerLSB;
+    private double magnetometerLSB;
+    private double gyroscopeLSB;
+    private double rCoeff;
+    private double qCoeff;
+
+    private double[] q_est = new double[]{1, 0, 0, 0};
     private double w_bx, w_by, w_bz;
     private DataContainer data = new DataContainer();
     private ProcessedData processedData = new ProcessedData();
     private Consumer<? super ProcessedData> consumer;
-    /*KalmanFilter filterAccelerometer = new KalmanFilter(10, 0);
-    KalmanFilter filterGyroscope = new KalmanFilter(10, 0);
-    KalmanFilter filterMagnetometer = new KalmanFilter(10, 0);*/
 
-    public Madgwick(){}
+    /*KalmanFilter filterAccelerometer = new KalmanFilter(rCoeff, qCoeff);
+    KalmanFilter filterGyroscope = new KalmanFilter(rCoeff, qCoeff);
+    KalmanFilter filterMagnetometer = new KalmanFilter(rCoeff, qCoeff);*/
+
+
+    public Madgwick() {
+        setSettings(new MadgwickSettings());
+    }
 
     @Override
     public double[] getQuaternion() {
@@ -39,8 +53,6 @@ public class Madgwick implements Algorithm {
         //System.out.println(q_est0+" "+ q_est1+" "+q_est2+" "+q_est3);
         //gyro measurements
         /*double[] shift = new double[]{21.4580000000000,	-68.0660000000000,	-5.88000000000000};
-        double[] meanOmega = new double[]{-15.6578522064539*0, 12.1353352494829*0, 4.00066533165606*0, -32.2089850550841*0};
-        double[] dzeta = new double[]{19.8801996096179, -11.1979384462225, -7.54854791539700, 27.3810216723686};
         g[0] -= shift[0];
         g[1] -= shift[1];
         g[2] -= shift[2];*/
@@ -52,10 +64,9 @@ public class Madgwick implements Algorithm {
         m = filterMagnetometer.getX_hat();
         g = filterGyroscope.getX_hat();*/
 
-        double k = 1;//Math.PI * 0.07 / 180;//70 mdps/LSB
-        wx = g[0] * k;
-        wy = g[1] * k;
-        wz = g[2] * k;
+        wx = g[0] * gyroscopeLSB;
+        wy = g[1] * gyroscopeLSB;
+        wz = g[2] * gyroscopeLSB;
 
         double nm = Math.sqrt(m[0] * m[0] + m[1] * m[1] + m[2] * m[2]);
         if (nm == 0) {
@@ -173,7 +184,16 @@ public class Madgwick implements Algorithm {
 
     @Override
     public void run() {
+        try {
+            while (!Thread.interrupted()) {
+                isAlive = true;
+            }
+            isAlive = false;
+        } catch (Exception exception) {
+            isAlive = false;
+        }
     }
+
 
     @Override
     public void accept(DataContainer dataContainer) {
@@ -181,10 +201,23 @@ public class Madgwick implements Algorithm {
         calculatePosition(data.getAccelerometer(), data.getMagnetometer(), data.getGyroscope());
         processedData.setQ(q_est);
         processedData.setRawData(data);
-        receiveData().subscribe(consumer);
+        if (isAlive) {
+            receiveData().subscribe(consumer);
+        }
     }
 
     public Flux<ProcessedData> receiveData() {
         return Flux.fromArray(new ProcessedData[]{processedData});
+    }
+
+    public void setSettings(MadgwickSettings set) {
+        this.zeta = set.getZeta();
+        this.beta = set.getBeta();
+        this.dt = set.getDt();
+        this.accelerometerLSB = set.getAccelerometerLSB();
+        this.magnetometerLSB = set.getMagnetometerLSB();
+        this.gyroscopeLSB = set.getGyroscopeLSB();
+        this.rCoeff = set.getrCoeff();
+        this.qCoeff = set.getqCoeff();
     }
 }

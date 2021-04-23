@@ -80,14 +80,13 @@ public class Client extends Thread {
     @Override
     public void run() {
         onStart();
-        while (true) {
+        while (!Thread.interrupted()) {
             Message msg = null;
             try {
                 msg = connection.receive(1200, TimeUnit.MILLISECONDS);
                 data = converter.convert(new String(msg.getPayload()));
                 receive().subscribe(consumer);
-            } catch (Exception exception) {
-                exception.printStackTrace();
+            } catch (Exception ignored) {
             }
         }
     }

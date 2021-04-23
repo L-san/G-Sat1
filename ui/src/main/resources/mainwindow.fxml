@@ -32,10 +32,24 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Box?>
 <?import javafx.scene.text.Font?>
+
 <VBox maxHeight="720.0" maxWidth="1280.0" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ssau.spacegradient.ViewController">
     <MenuBar VBox.vgrow="NEVER">
         <Menu mnemonicParsing="false" text="Extras">
@@ -46,9 +60,9 @@
             <MenuItem mnemonicParsing="false" text="Stop transmitting data" />
         </Menu>
         <Menu mnemonicParsing="false" text="Data format">
-            <CheckMenuItem fx:id="jsonFormat" mnemonicParsing="false" text="JSON"/>
-            <CheckMenuItem mnemonicParsing="false" text="XML" fx:id="xmlFormat"/>
-            <CheckMenuItem fx:id="protobufFormat" mnemonicParsing="false" text="Protocol Buffers"/>
+            <CheckMenuItem fx:id="jsonFormat" mnemonicParsing="false" text="JSON" />
+            <CheckMenuItem mnemonicParsing="false" text="XML" fx:id="xmlFormat" />
+            <CheckMenuItem fx:id="protobufFormat" mnemonicParsing="false" text="Protocol Buffers" />
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
             <MenuItem mnemonicParsing="false" text="About" />
@@ -70,7 +84,7 @@
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="56.0" prefWidth="407.0">
                         <ButtonBar layoutX="3.0" layoutY="42.0" prefHeight="25.0" prefWidth="400.0">
                             <buttons>
-                        <ToggleButton mnemonicParsing="false" onMousePressed="#startConnection" onMouseReleased="#stopConnection" text="Connect">
+                        <ToggleButton fx:id="connectionButton" mnemonicParsing="false" onAction="#startConnection" text="Connect">
                            </ToggleButton>
                             </buttons>
                         </ButtonBar>
@@ -97,7 +111,7 @@
         </TabPane>
       <ButtonBar layoutX="771.0" layoutY="661.0" prefHeight="25.0" prefWidth="495.0">
          <buttons>
-            <ToggleButton id="startProcessingButton" mnemonicParsing="false" onAction="#startProcessing" text="Start Processing" />
+            <ToggleButton id="startProcessingButton" fx:id="startProcessingButton" mnemonicParsing="false" onAction="#startProcessing" text="Start Processing" />
          </buttons>
       </ButtonBar>
     <AnchorPane layoutX="131.0" layoutY="294.0" minHeight="0.0" minWidth="0.0" prefHeight="187.0" prefWidth="284.0" />
@@ -107,22 +121,22 @@
                     <Label layoutX="470.0" layoutY="20.0" rotate="90.0" />
                     <SplitPane dividerPositions="0.9424184261036468" layoutY="1.0" prefHeight="277.0" prefWidth="523.0">
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="275.0" prefWidth="492.0">
-                            <TextField layoutX="391.0" layoutY="182.0" rotate="90.0" />
+                            <TextField fx:id="accelerometerLSB" layoutX="391.0" layoutY="182.0" rotate="90.0" />
                             <Label layoutX="413.0" layoutY="41.0" prefHeight="31.0" prefWidth="110.0" rotate="90.0" text="Accelerometer, g" />
-                            <TextField layoutX="361.0" layoutY="182.0" rotate="90.0" />
+                            <TextField fx:id="magnetometerLSB" layoutX="361.0" layoutY="182.0" rotate="90.0" />
                             <Label layoutX="374.0" layoutY="47.0" prefHeight="31.0" prefWidth="124.0" rotate="90.0" text="Magnetometer, mGs" />
-                            <TextField layoutX="330.0" layoutY="182.0" rotate="90.0" />
+                            <TextField fx:id="gyroscopeLSB" layoutX="330.0" layoutY="182.0" rotate="90.0" />
                             <Label layoutX="344.0" layoutY="48.0" prefHeight="31.0" prefWidth="124.0" rotate="90.0" text="Gyroscope, mdps" />
                             <SplitPane dividerPositions="0.8992805755395683" layoutX="-35.0" layoutY="-5.0" prefHeight="281.0" prefWidth="419.0">
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                                    <TextField layoutX="278.0" layoutY="186.0" rotate="90.0" />
+                                    <TextField fx:id="beta" layoutX="278.0" layoutY="186.0" rotate="90.0" />
                                     <Label layoutX="297.0" layoutY="50.0" prefHeight="31.0" prefWidth="110.0" rotate="90.0" text="β" />
-                                    <TextField layoutX="247.0" layoutY="186.0" rotate="90.0" />
+                                    <TextField fx:id="zeta" layoutX="247.0" layoutY="186.0" rotate="90.0" />
                                     <Label layoutX="270.0" layoutY="49.0" prefHeight="31.0" prefWidth="110.0" rotate="90.0" text="ζ" />
                                     <SplitPane dividerPositions="0.8473282442748091" layoutX="31.0" layoutY="4.0" prefHeight="276.0" prefWidth="264.0">
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                                            <TextField layoutX="124.0" layoutY="181.0" rotate="90.0" />
-                                            <TextField layoutX="91.0" layoutY="181.0" rotate="90.0" />
+                                            <TextField fx:id="rCoeff" layoutX="124.0" layoutY="181.0" rotate="90.0" />
+                                            <TextField fx:id="qCoeff" layoutX="91.0" layoutY="181.0" rotate="90.0" />
                                             <Label layoutX="143.0" layoutY="40.0" prefHeight="31.0" prefWidth="110.0" rotate="90.0" text="Measurement noise" />
                                             <Label layoutX="111.0" layoutY="41.0" prefHeight="31.0" prefWidth="110.0" rotate="90.0" text="Process noise" />
                                         </AnchorPane>
