@@ -1,16 +1,13 @@
 package ssau.spacegradient.clientapp.client;
 
+import org.fusesource.mqtt.client.*;
+import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import ssau.spacegradient.clientapp.client.converter.AbstractConverter;
 import ssau.spacegradient.clientapp.client.converter.DataContainer;
 import ssau.spacegradient.clientapp.client.converter.JsonConverter;
-import org.fusesource.mqtt.client.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import java.io.FileWriter;
 import java.net.URISyntaxException;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -25,11 +22,8 @@ public class Client extends Thread {
     private DataContainer data = new DataContainer();
 
     public Client() {
-        /*this.ipAddress = "62.77.153.231";
+        this.ipAddress = "62.77.153.231";
         this.port = 1883;
-        this.topic = "test";*/
-        this.ipAddress = "0.0.0.0";
-        this.port = 1;
         //this.topic = "json/realtime";
         this.topic = "Received data";
         this.converter = new JsonConverter();
@@ -84,11 +78,9 @@ public class Client extends Thread {
         onStart();
         while (!Thread.interrupted()) {
             Message msg = null;
-            try(FileWriter writer = new FileWriter("data.txt", true)) {
+            try {
                 msg = connection.receive(1200, TimeUnit.MILLISECONDS);
                 data = converter.convert(new String(msg.getPayload()));
-                writer.write(data.getData());
-                writer.flush();
                 receive().subscribe(consumer);
             } catch (Exception ignored) {
             }

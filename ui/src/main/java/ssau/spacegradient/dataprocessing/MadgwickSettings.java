@@ -8,12 +8,12 @@ public class MadgwickSettings {
     private double dt = 0.01;
     private double accelerometerLSB = 1;
     private double magnetometerLSB = 1;
-    private double gyroscopeLSB = 1;//Math.PI * 0.07 / 180;//70 mdps/LSB
+    private double gyroscopeLSB = Math.PI * 0.07 / 180;//Math.PI * 0.07 / 180;//70 mdps/LSB
 
     public MadgwickSettings(){}
 
     public MadgwickSettings( String beta, String zeta,
-                             String accelerometerLSB, String magnetometerLSB, String gyroscopeLSB) throws Exception {
+                             String accelerometerLSB, String magnetometerLSB, String gyroscopeLSB, String dt) throws Exception {
         try{
             if (!beta.isEmpty()) {
                 this.beta = Double.parseDouble(beta);
@@ -34,6 +34,10 @@ public class MadgwickSettings {
             if (!gyroscopeLSB.isEmpty()) {
                 this.gyroscopeLSB = Double.parseDouble(gyroscopeLSB);
             }
+            if(!dt.isEmpty()){
+                this.dt = Double.parseDouble(dt);
+            }
+
         }catch (Exception exception){
             throw new Exception("Incorrect telemetry properties");
         }

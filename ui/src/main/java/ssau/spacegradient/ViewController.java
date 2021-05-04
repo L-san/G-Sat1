@@ -39,6 +39,7 @@ public class ViewController implements Consumer<ProcessedData> {
     public TextField accelerometerLSB;
     public TextField magnetometerLSB;
     public TextField gyroscopeLSB;
+    public TextField time;
 
     public TextField rCoeff;
     public TextField qCoeff;
@@ -67,11 +68,11 @@ public class ViewController implements Consumer<ProcessedData> {
             try {
                 ip = ipAddressTextField.getText();
                 port = Integer.parseInt(portTextField.getText());
-                if (ip.equals("")) {
-                    throw new IllegalArgumentException("Please, enter ip-address");
+                if (!ip.equals("")) {
+                    controller.generateClient(ip, port);
+                } else {
+                    controller.generateClient();
                 }
-                System.out.println(ip + " " + port);
-                controller.generateClient(ip, port);
                 controller.startClient();
             } catch (Exception exception) {
                 exception.printStackTrace();
@@ -98,7 +99,8 @@ public class ViewController implements Consumer<ProcessedData> {
                         zeta.getText(),
                         accelerometerLSB.getText(),
                         magnetometerLSB.getText(),
-                        gyroscopeLSB.getText());
+                        gyroscopeLSB.getText(),
+                        time.getText());
                 controller.startAlgorithm(this, set);
             } catch (Exception exception) {
                 connStatusLabel.setText(exception.getMessage());

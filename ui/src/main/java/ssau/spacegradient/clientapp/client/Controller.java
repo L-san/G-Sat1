@@ -25,6 +25,10 @@ public class Controller {
         clientController.setClient(ip, port);
     }
 
+    public void generateClient() throws IllegalArgumentException {
+        clientController.setClient();
+    }
+
     public void startClient() {
         clientController.start(algorithmController.getAlgorithm());
     }
