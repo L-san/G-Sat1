@@ -18,20 +18,14 @@ public class Madgwick implements Algorithm {
     private double dt;
     private double accelerometerLSB;
     private double magnetometerLSB;
-    private double gyroscopeLSB;
-    private double rCoeff;
-    private double qCoeff;
+    private double gyroscopeLSB;//70 mdps/LSB;
+    private Filter filter = new Filter();
 
     private double[] q_est = new double[]{1, 0, 0, 0};
     private double w_bx, w_by, w_bz;
     private DataContainer data = new DataContainer();
     private ProcessedData processedData = new ProcessedData();
     private Consumer<? super ProcessedData> consumer;
-
-    /*KalmanFilter filterAccelerometer = new KalmanFilter(rCoeff, qCoeff);
-    KalmanFilter filterGyroscope = new KalmanFilter(rCoeff, qCoeff);
-    KalmanFilter filterMagnetometer = new KalmanFilter(rCoeff, qCoeff);*/
-
 
     public Madgwick() {
         setSettings(new MadgwickSettings());
@@ -47,6 +41,10 @@ public class Madgwick implements Algorithm {
         this.consumer = consumer;
     }
 
+    public void setFilter(Filter filter) {
+        this.filter = filter;
+    }
+
     @Override
     public void calculatePosition(double[] a, double[] m, double[] g) {
         double wx, wy, wz, w_eps_x, w_eps_y, w_eps_z;
@@ -56,13 +54,12 @@ public class Madgwick implements Algorithm {
         g[0] -= shift[0];
         g[1] -= shift[1];
         g[2] -= shift[2];*/
-
-       /* filterAccelerometer.doFiltering(a);
-        filterGyroscope.doFiltering(g);
-        filterMagnetometer.doFiltering(m);
-        a = filterAccelerometer.getX_hat();
-        m = filterMagnetometer.getX_hat();
-        g = filterGyroscope.getX_hat();*/
+        gyroscopeLSB = Math.PI * 0.07 / 180;
+        filter.doFiltering(new double[]{a[0], a[1], a[2], m[0],m[1],m[2],g[0],g[1],g[2]});
+        double[] z = filter.getX_hat();
+        a = new double[]{z[0],z[1],z[2]};
+        m = new double[]{z[3],z[4],z[5]};
+        g = new double[]{z[6],z[7],z[8]};
 
         wx = g[0] * gyroscopeLSB;
         wy = g[1] * gyroscopeLSB;
@@ -211,13 +208,9 @@ public class Madgwick implements Algorithm {
     }
 
     public void setSettings(MadgwickSettings set) {
-        this.zeta = set.getZeta();
-        this.beta = set.getBeta();
         this.dt = set.getDt();
         this.accelerometerLSB = set.getAccelerometerLSB();
         this.magnetometerLSB = set.getMagnetometerLSB();
         this.gyroscopeLSB = set.getGyroscopeLSB();
-        this.rCoeff = set.getrCoeff();
-        this.qCoeff = set.getqCoeff();
     }
 }

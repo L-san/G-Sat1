@@ -2,27 +2,28 @@ package ssau.spacegradient.dataprocessing;
 
 import org.ejml.simple.SimpleMatrix;
 
-public class KalmanFilter {
-    private SimpleMatrix x_hat = SimpleMatrix.diag(0d,0d,0d);
-    private SimpleMatrix P = SimpleMatrix.identity(3);
+public class KalmanFilter extends Filter{
+    private SimpleMatrix x_hat;
+    private SimpleMatrix P = SimpleMatrix.identity(9);
     private final SimpleMatrix R;
     private final SimpleMatrix Q;
     private int cnt = 0;
 
-    public KalmanFilter(double Rcoeff, double Qcoeff){
-        R = SimpleMatrix.diag(Rcoeff,Rcoeff,Rcoeff);
-        Q = SimpleMatrix.diag(Qcoeff,Qcoeff,Qcoeff);
+    public KalmanFilter(double Rcoeff, double Qcoeff) {
+        this.x_hat = new SimpleMatrix(9, 1);
+        R = SimpleMatrix.diag(Rcoeff, Rcoeff, Rcoeff, Rcoeff, Rcoeff, Rcoeff, Rcoeff, Rcoeff, Rcoeff);
+        Q = SimpleMatrix.diag(Qcoeff, Qcoeff, Qcoeff, Qcoeff, Qcoeff, Qcoeff, Qcoeff, Qcoeff, Qcoeff);
     }
 
-    public void doFiltering(double[] z){
-        SimpleMatrix Z = new SimpleMatrix(3,1);
-        Z.set(0,0,z[0]);
-        Z.set(1,0,z[1]);
-        Z.set(2,0,z[2]);
-        if (cnt ==0){
+    public void doFiltering(double[] z) {
+        SimpleMatrix Z = new SimpleMatrix(9, 1);
+        for (int i = 0; i < 9; i++) {
+            Z.set(i, 0, z[i]);
+        }
+        if (cnt == 0) {
             x_hat = Z;
             cnt++;
-        }else{
+        } else {
             //prediction
             P = P.plus(Q);
             //correction
@@ -33,6 +34,10 @@ public class KalmanFilter {
     }
 
     public double[] getX_hat() {
-        return new double[]{x_hat.get(0,0),x_hat.get(1,0),x_hat.get(2,0)};
+        double[] ans = new double[9];
+        for(int i = 0; i<9;i++){
+            ans[i] = x_hat.get(i, 0);
+        }
+        return ans;
     }
 }

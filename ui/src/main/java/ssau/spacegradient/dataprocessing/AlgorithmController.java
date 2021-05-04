@@ -9,7 +9,6 @@ import java.util.function.Consumer;
 public class AlgorithmController {
     private final Madgwick algorithm;
     private Thread algorithmThread;
-
     @Autowired
     public AlgorithmController(Madgwick algorithm) {
         this.algorithm = algorithm;
@@ -29,5 +28,9 @@ public class AlgorithmController {
 
     public void stop() {
         this.algorithmThread.interrupt();
+    }
+
+    public void setFilter(Filter filter) {
+        algorithm.setFilter(filter);
     }
 }

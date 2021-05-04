@@ -3,9 +3,7 @@ package ssau.spacegradient.clientapp.client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ssau.spacegradient.clientapp.client.ClientController;
-import ssau.spacegradient.dataprocessing.AlgorithmController;
-import ssau.spacegradient.dataprocessing.MadgwickSettings;
-import ssau.spacegradient.dataprocessing.ProcessedData;
+import ssau.spacegradient.dataprocessing.*;
 
 import java.util.function.Consumer;
 
@@ -42,4 +40,6 @@ public class Controller {
     public void stopAlgorithm(){
         algorithmController.stop();
     }
+
+    public void setFilter(Filter filter){algorithmController.setFilter(filter);}
 }

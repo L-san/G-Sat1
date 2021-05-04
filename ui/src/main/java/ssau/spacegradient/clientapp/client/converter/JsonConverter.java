@@ -1,5 +1,12 @@
 package ssau.spacegradient.clientapp.client.converter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+
+
+import java.io.File;
+import java.io.IOException;
+
 public class JsonConverter extends AbstractConverter {
     /*{
   "name":"inertial",
@@ -11,9 +18,11 @@ public class JsonConverter extends AbstractConverter {
 }*/
 
     public DataContainer convert(String message) {
-        DataContainer container = new DataContainer();
+        Gson gson = new Gson();
+        Pojo read = gson.fromJson(message, Pojo.class);
+        DataContainer container = new DataContainer(read.getAccelerometer(), read.getMagnetometer(), read.getGyroscope());
         container.setMessage(message);
-        double[] accelerometer = new double[3];
+        /*double[] accelerometer = new double[3];
         double[] magnetometer = new double[3];
         double[] gyroscope = new double[3];
         String substringAccelerometer = "\"accelerometer\":[";
@@ -40,10 +49,12 @@ public class JsonConverter extends AbstractConverter {
                 magnetometer[i] = Double.parseDouble(magnetometerStr[i]);
                 gyroscope[i] = Double.parseDouble(gyroscopeStr[i]);
             }
+
+
             container = new DataContainer(accelerometer, magnetometer, gyroscope);
         } catch (Exception exception) {
             container.setStatus("Unexpected data format");
-        }
+        }*/
         return container;
     }
 }

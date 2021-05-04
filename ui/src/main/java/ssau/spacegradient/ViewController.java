@@ -5,10 +5,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point3D;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -16,6 +13,8 @@ import javafx.scene.shape.Box;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
+import ssau.spacegradient.dataprocessing.Filter;
+import ssau.spacegradient.dataprocessing.KalmanFilter;
 import ssau.spacegradient.dataprocessing.MadgwickSettings;
 import ssau.spacegradient.dataprocessing.ProcessedData;
 import ssau.spacegradient.clientapp.client.Controller;
@@ -44,6 +43,8 @@ public class ViewController implements Consumer<ProcessedData> {
     public TextField rCoeff;
     public TextField qCoeff;
 
+    public CheckMenuItem filter;
+
     public ViewController() {
         ApplicationContext context = new AnnotationConfigApplicationContext(
                 "ssau.spacegradient.dataprocessing",
@@ -59,7 +60,7 @@ public class ViewController implements Consumer<ProcessedData> {
         phongMaterial.setDiffuseColor(Color.POWDERBLUE);
         box.setMaterial(phongMaterial);
 
-        if(connectionButton.isSelected()){
+        if (connectionButton.isSelected()) {
             String ip = null;
             int port = 0;
             boolean isOk = true;
@@ -78,7 +79,7 @@ public class ViewController implements Consumer<ProcessedData> {
                 isOk = false;
             }
             if (isOk) connStatusLabel.setText("Connected to " + ip + ":" + port);
-        }else if(!connectionButton.isSelected()){
+        } else if (!connectionButton.isSelected()) {
             controller.stopClient();
             controller.stopAlgorithm();
             connStatusLabel.setText("Disconnected");
@@ -97,9 +98,7 @@ public class ViewController implements Consumer<ProcessedData> {
                         zeta.getText(),
                         accelerometerLSB.getText(),
                         magnetometerLSB.getText(),
-                        gyroscopeLSB.getText(),
-                        rCoeff.getText(),
-                        qCoeff.getText());
+                        gyroscopeLSB.getText());
                 controller.startAlgorithm(this, set);
             } catch (Exception exception) {
                 connStatusLabel.setText(exception.getMessage());
@@ -109,7 +108,6 @@ public class ViewController implements Consumer<ProcessedData> {
             controller.stopAlgorithm();
             startProcessingButton.setSelected(false);
         }
-
     }
 
 
@@ -132,6 +130,23 @@ public class ViewController implements Consumer<ProcessedData> {
         rotate.setAxis(rotationAxis);
         rotate.setNode(this.box);
         rotate.play();
+    }
+
+    public void doFiltering(ActionEvent actionEvent) {
+        if (filter.isSelected()) {
+            double r = 0;
+            double q = 0;
+            try {
+                r = Double.parseDouble(rCoeff.getText());
+                q = Double.parseDouble(qCoeff.getText());
+                controller.setFilter(new KalmanFilter(r, q));
+            } catch (Exception exception) {
+                connStatusLabel.setText("Incorrect filter parameters");
+                filter.setSelected(false);
+            }
+        } else if (!filter.isSelected()) {
+            controller.setFilter(new Filter());
+        }
     }
 }
 

@@ -57,4 +57,11 @@ public class DataContainer {
                 "\nStatus: "+status+
                 "\nMessage: "+message;
     }
+
+    public String getData() {
+        return Arrays.toString(accelerometer) +
+                " " + Arrays.toString(magnetometer) +
+                " " + Arrays.toString(gyroscope)+
+                "\n";
+    }
 }

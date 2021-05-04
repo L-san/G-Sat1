@@ -9,14 +9,11 @@ public class MadgwickSettings {
     private double accelerometerLSB = 1;
     private double magnetometerLSB = 1;
     private double gyroscopeLSB = 1;//Math.PI * 0.07 / 180;//70 mdps/LSB
-    private double rCoeff = 0;
-    private double qCoeff = 0;
 
     public MadgwickSettings(){}
 
     public MadgwickSettings( String beta, String zeta,
-                             String accelerometerLSB, String magnetometerLSB, String gyroscopeLSB,
-                             String rCoeff, String qCoeff) throws Exception {
+                             String accelerometerLSB, String magnetometerLSB, String gyroscopeLSB) throws Exception {
         try{
             if (!beta.isEmpty()) {
                 this.beta = Double.parseDouble(beta);
@@ -36,14 +33,6 @@ public class MadgwickSettings {
 
             if (!gyroscopeLSB.isEmpty()) {
                 this.gyroscopeLSB = Double.parseDouble(gyroscopeLSB);
-            }
-
-            if (!rCoeff.isEmpty()) {
-                this.rCoeff = Double.parseDouble(rCoeff);
-            }
-
-            if (!qCoeff.isEmpty()) {
-                this.qCoeff = Double.parseDouble(qCoeff);
             }
         }catch (Exception exception){
             throw new Exception("Incorrect telemetry properties");
@@ -72,13 +61,5 @@ public class MadgwickSettings {
 
     public double getGyroscopeLSB() {
         return gyroscopeLSB;
-    }
-
-    public double getrCoeff() {
-        return rCoeff;
-    }
-
-    public double getqCoeff() {
-        return qCoeff;
     }
 }
