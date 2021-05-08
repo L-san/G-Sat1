@@ -1,17 +1,12 @@
 package ssau.spacegradient.dataprocessing;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import ssau.spacegradient.clientapp.client.converter.DataContainer;
 
-import java.awt.*;
 import java.io.FileWriter;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 @Component
@@ -24,6 +19,7 @@ public class Madgwick implements Algorithm {
     private double magnetometerLSB;
     private double gyroscopeLSB;//70 mdps/LSB;
     private Filter filter = new Filter();
+    private String message;
 
     private double[] q_est = new double[]{1, 0, 0, 0};
     private double w_bx, w_by, w_bz;
@@ -33,10 +29,10 @@ public class Madgwick implements Algorithm {
 
     public Madgwick() {
         setSettings(new MadgwickSettings());
-        try(FileWriter writerKalman = new FileWriter("dataFiltered.txt", false);
-            FileWriter writerMadgwick = new FileWriter("dataMadgwick.txt", false)) {
-            writerKalman.write(new Date().toString()+"\n kalman from accelerometer magnetometer gyroscope\n");
-            writerMadgwick.write(new Date().toString()+"\n quaternion from madgwick [q0 q1 q2 q3]\n");
+        try (FileWriter writerKalman = new FileWriter("dataFiltered.txt", false);
+             FileWriter writerMadgwick = new FileWriter("dataMadgwick.txt", false)) {
+            writerKalman.write(new Date().toString() + "\n kalman from accelerometer magnetometer gyroscope\n");
+            writerMadgwick.write(new Date().toString() + "\n quaternion from madgwick [q0 q1 q2 q3]\n");
             writerKalman.flush();
             writerMadgwick.flush();
 
@@ -67,17 +63,26 @@ public class Madgwick implements Algorithm {
         g[0] -= shift[0];
         g[1] -= shift[1];
         g[2] -= shift[2];*/
-        filter.doFiltering(new double[]{a[0], a[1], a[2], m[0], m[1], m[2], g[0], g[1], g[2]});
+        filter.doFiltering(new double[]{a[0] / accelerometerLSB,
+                a[1] / accelerometerLSB,
+                a[2] / accelerometerLSB,
+                m[0] / magnetometerLSB,
+                m[1] / magnetometerLSB,
+                m[2] / magnetometerLSB,
+                g[0] / gyroscopeLSB,
+                g[1] / gyroscopeLSB,
+                g[2] / gyroscopeLSB});
         double[] z = filter.getX_hat();
         a = new double[]{z[0], z[1], z[2]};
         m = new double[]{z[3], z[4], z[5]};
         g = new double[]{z[6], z[7], z[8]};
         data = new DataContainer(a, m, g);
+        data.setMessage(message);
         saveProcessedData();
 
-        wx = g[0] * gyroscopeLSB;
-        wy = g[1] * gyroscopeLSB;
-        wz = g[2] * gyroscopeLSB;
+        wx = g[0];
+        wy = g[1];
+        wz = g[2];
 
         double nm = Math.sqrt(m[0] * m[0] + m[1] * m[1] + m[2] * m[2]);
         if (nm == 0) {
@@ -208,11 +213,12 @@ public class Madgwick implements Algorithm {
 
     @Override
     public void accept(DataContainer dataContainer) {
-        this.data = dataContainer;
-        calculatePosition(data.getAccelerometer(), data.getMagnetometer(), data.getGyroscope());
-        processedData.setQ(q_est);
-        processedData.setRawData(data);
-        if (isAlive) {
+        if (isAlive && (consumer != null)) {
+            this.data = dataContainer;
+            message = dataContainer.getMessage();
+            calculatePosition(data.getAccelerometer(), data.getMagnetometer(), data.getGyroscope());
+            processedData.setQ(q_est);
+            processedData.setRawData(data);
             receiveData().subscribe(consumer);
         }
     }
@@ -227,13 +233,15 @@ public class Madgwick implements Algorithm {
         this.magnetometerLSB = set.getMagnetometerLSB();
         this.gyroscopeLSB = set.getGyroscopeLSB();
         this.dt = set.getDt();
+        this.beta = set.getBeta();
+        this.zeta = set.getZeta();
     }
 
     public void saveProcessedData() {
         try (FileWriter writerKalman = new FileWriter("dataFiltered.txt", true);
              FileWriter writerMadgwick = new FileWriter("dataMadgwick.txt", true)) {
             writerKalman.write(data.getData());
-            writerMadgwick.write(Arrays.toString(processedData.getQ()));
+            writerMadgwick.write(Arrays.toString(processedData.getQ()) + "\n");
             writerKalman.flush();
             writerMadgwick.flush();
 

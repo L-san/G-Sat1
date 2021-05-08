@@ -14,9 +14,9 @@ public class DataContainer {
     private String message;
 
     public DataContainer() {
-        this.accelerometer = new double[3];
-        this.magnetometer = new double[3];
-        this.gyroscope = new double[3];
+        this.accelerometer = new double[]{0,0,0};
+        this.magnetometer = new double[]{0,0,0};
+        this.gyroscope = new double[]{0,0,0};
     }
 
     public DataContainer(double[] accelerometer, double[] magnetometer, double[] gyroscope) {
@@ -47,6 +47,10 @@ public class DataContainer {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     @Override

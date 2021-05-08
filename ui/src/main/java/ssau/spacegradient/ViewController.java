@@ -68,17 +68,12 @@ public class ViewController implements Consumer<ProcessedData> {
             try {
                 ip = ipAddressTextField.getText();
                 port = Integer.parseInt(portTextField.getText());
-                if (!ip.equals("")) {
-                    controller.generateClient(ip, port);
-                } else {
-                    controller.generateClient();
-                }
-                controller.startClient();
+                controller.generateClient(ip, port);
             } catch (Exception exception) {
-                exception.printStackTrace();
                 connStatusLabel.setText("Incorrect host address");
                 isOk = false;
             }
+            controller.startClient();
             if (isOk) connStatusLabel.setText("Connected to " + ip + ":" + port);
         } else if (!connectionButton.isSelected()) {
             controller.stopClient();
@@ -122,7 +117,7 @@ public class ViewController implements Consumer<ProcessedData> {
             angle = 2 * Math.acos(q[0]);
             Point3D rotationAxis = new Point3D(-q[2], q[3], q[1]);
             rotateBox(angle * 180 / Math.PI, rotationAxis);
-            System.out.println(angle + " " + q[1] + " " + q[2] + " " + q[3]);
+           // System.out.println(angle + " " + q[1] + " " + q[2] + " " + q[3]);
         });
     }
 
@@ -142,11 +137,13 @@ public class ViewController implements Consumer<ProcessedData> {
                 r = Double.parseDouble(rCoeff.getText());
                 q = Double.parseDouble(qCoeff.getText());
                 controller.setFilter(new KalmanFilter(r, q));
+                connStatusLabel.setText("Filter is enabled");
             } catch (Exception exception) {
                 connStatusLabel.setText("Incorrect filter parameters");
                 filter.setSelected(false);
             }
         } else if (!filter.isSelected()) {
+            connStatusLabel.setText("Filter is disabled");
             controller.setFilter(new Filter());
         }
     }
