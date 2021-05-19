@@ -13,6 +13,9 @@ import javafx.scene.shape.Box;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
+import ssau.spacegradient.clientapp.client.converter.JsonConverter;
+import ssau.spacegradient.clientapp.client.converter.ProtocolBuffersConverter;
+import ssau.spacegradient.clientapp.client.converter.XmlConverter;
 import ssau.spacegradient.dataprocessing.Filter;
 import ssau.spacegradient.dataprocessing.KalmanFilter;
 import ssau.spacegradient.dataprocessing.MadgwickSettings;
@@ -45,6 +48,9 @@ public class ViewController implements Consumer<ProcessedData> {
     public TextField qCoeff;
 
     public CheckMenuItem filter;
+    public CheckMenuItem jsonFormat;
+    public CheckMenuItem protobufFormat;
+    public CheckMenuItem xmlFormat;
 
     public ViewController() {
         ApplicationContext context = new AnnotationConfigApplicationContext(
@@ -110,7 +116,7 @@ public class ViewController implements Consumer<ProcessedData> {
 
     @Override
     public void accept(ProcessedData data) {
-        /*Platform.runLater(() -> {
+        Platform.runLater(() -> {
             telemetryLabel.setText(data.getRawData().toString());
             double[] q = data.getQ();
             double angle;
@@ -118,7 +124,7 @@ public class ViewController implements Consumer<ProcessedData> {
             Point3D rotationAxis = new Point3D(-q[2], q[3], q[1]);
             rotateBox(angle * 180 / Math.PI, rotationAxis);
            // System.out.println(angle + " " + q[1] + " " + q[2] + " " + q[3]);
-        });*/
+        });
     }
 
     protected final void rotateBox(double angle, Point3D rotationAxis) {
@@ -146,6 +152,33 @@ public class ViewController implements Consumer<ProcessedData> {
             connStatusLabel.setText("Filter is disabled");
             controller.setFilter(new Filter());
         }
+    }
+
+    public void jsonClicked(ActionEvent actionEvent) {
+        if(!jsonFormat.isSelected()){
+            controller.setConverter(new JsonConverter());
+        }
+        jsonFormat.setSelected(true);
+        xmlFormat.setSelected(false);
+        protobufFormat.setSelected(false);
+    }
+
+    public void xmlClicked(ActionEvent actionEvent) {
+        if(!xmlFormat.isSelected()){
+            controller.setConverter(new XmlConverter());
+        }
+        jsonFormat.setSelected(false);
+        xmlFormat.setSelected(true);
+        protobufFormat.setSelected(false);
+    }
+
+    public void protobufClicked(ActionEvent actionEvent) {
+        if(!protobufFormat.isSelected()){
+            controller.setConverter(new ProtocolBuffersConverter());
+        }
+        jsonFormat.setSelected(false);
+        xmlFormat.setSelected(false);
+        protobufFormat.setSelected(true);
     }
 }
 

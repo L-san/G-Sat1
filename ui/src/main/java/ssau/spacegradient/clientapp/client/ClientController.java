@@ -1,5 +1,6 @@
 package ssau.spacegradient.clientapp.client;
 
+import ssau.spacegradient.clientapp.client.converter.AbstractConverter;
 import ssau.spacegradient.clientapp.client.converter.DataContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,6 +32,10 @@ public class ClientController {
         this.clientThread = new Thread(client);
         this.clientThread.setDaemon(true);
         this.clientThread.start();
+    }
+
+    public void setConverter(AbstractConverter converter){
+        client.setConverter(converter);
     }
 
     public void stop() {

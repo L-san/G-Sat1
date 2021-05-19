@@ -1,8 +1,15 @@
 package ssau.spacegradient.clientapp.client.converter;
 
+import net.badata.protobuf.converter.annotation.ProtoClass;
+import net.badata.protobuf.converter.annotation.ProtoField;
+
+//@ProtoClass(ProtocolBuffersConverter.class)
 public class Pojo {
+   // @ProtoField
     double[] accelerometer;
+   // @ProtoField
     double[] gyroscope;
+   // @ProtoField
     double[] magnetometer;
 
     public Pojo(double[] accelerometer, double[] gyroscope, double[] magnetometer) {

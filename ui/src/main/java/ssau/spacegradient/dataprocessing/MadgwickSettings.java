@@ -3,12 +3,12 @@ package ssau.spacegradient.dataprocessing;
 import javafx.scene.control.TextField;
 
 public class MadgwickSettings {
-    private double zeta = 0;
-    private double beta = 0;
+    private double zeta = 0.01;
+    private double beta = 0.01;
     private double dt = 0.01;
     private double accelerometerLSB = 1;
     private double magnetometerLSB = 1;
-    private double gyroscopeLSB = Math.PI * 0.07 / 180;//Math.PI * 0.07 / 180;//70 mdps/LSB
+    private double gyroscopeLSB = 70*1e-3;//70 mdps/LSB
 
     public MadgwickSettings(){}
 

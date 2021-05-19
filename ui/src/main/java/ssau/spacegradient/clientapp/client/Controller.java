@@ -3,6 +3,7 @@ package ssau.spacegradient.clientapp.client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ssau.spacegradient.clientapp.client.ClientController;
+import ssau.spacegradient.clientapp.client.converter.AbstractConverter;
 import ssau.spacegradient.dataprocessing.*;
 
 import java.util.function.Consumer;
@@ -42,4 +43,8 @@ public class Controller {
     }
 
     public void setFilter(Filter filter){algorithmController.setFilter(filter);}
+
+    public void setConverter(AbstractConverter converter){
+        clientController.setConverter(converter);
+    }
 }

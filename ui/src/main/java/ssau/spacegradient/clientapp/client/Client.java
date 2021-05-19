@@ -76,14 +76,17 @@ public class Client extends Thread {
     @Override
     public void run() {
         onStart();
+        int i = 1;
         try {
             while (true) {
                 Message msg = null;
-                msg = connection.receive();
+                System.out.println(i++);
+                msg = connection.receive(1000, TimeUnit.MILLISECONDS);
                 data = converter.convert(new String(msg.getPayload()));
                 data.setMessage(new String(msg.getPayload()));
                 receive().subscribe(consumer);
                 System.out.println(new String(msg.getPayload()));
+                msg.ack();
             }
         } catch (Exception ignored) {
         }

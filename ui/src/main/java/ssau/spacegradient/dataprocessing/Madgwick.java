@@ -69,9 +69,9 @@ public class Madgwick implements Algorithm {
                 m[0] / magnetometerLSB,
                 m[1] / magnetometerLSB,
                 m[2] / magnetometerLSB,
-                g[0] / gyroscopeLSB,
-                g[1] / gyroscopeLSB,
-                g[2] / gyroscopeLSB});
+                g[0] * Math.PI / 180 * gyroscopeLSB,
+                g[1] * Math.PI / 180 * gyroscopeLSB,
+                g[2] * Math.PI / 180 * gyroscopeLSB});
         double[] z = filter.getX_hat();
         a = new double[]{z[0], z[1], z[2]};
         m = new double[]{z[3], z[4], z[5]};
@@ -213,14 +213,14 @@ public class Madgwick implements Algorithm {
 
     @Override
     public void accept(DataContainer dataContainer) {
-        if (isAlive && (consumer != null)) {
-            this.data = dataContainer;
-            message = dataContainer.getMessage();
-            calculatePosition(data.getAccelerometer(), data.getMagnetometer(), data.getGyroscope());
-            processedData.setQ(q_est);
-            processedData.setRawData(data);
-            receiveData().subscribe(consumer);
-        }
+        // if (isAlive && (consumer != null)) {
+        this.data = dataContainer;
+        message = dataContainer.getMessage();
+        calculatePosition(data.getAccelerometer(), data.getMagnetometer(), data.getGyroscope());
+        processedData.setQ(q_est);
+        processedData.setRawData(data);
+        receiveData().subscribe(consumer);
+        //}
     }
 
     public Flux<ProcessedData> receiveData() {

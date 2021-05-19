@@ -59,9 +59,9 @@
             <MenuItem mnemonicParsing="false" text="Stop transmitting data" />
         </Menu>
         <Menu mnemonicParsing="false" text="Data format">
-            <CheckMenuItem fx:id="jsonFormat" mnemonicParsing="false" text="JSON" />
-            <CheckMenuItem mnemonicParsing="false" text="XML" fx:id="xmlFormat" />
-            <CheckMenuItem fx:id="protobufFormat" mnemonicParsing="false" text="Protocol Buffers" />
+            <CheckMenuItem fx:id="jsonFormat" mnemonicParsing="false" onAction="#jsonClicked" text="JSON" />
+            <CheckMenuItem mnemonicParsing="false" onAction="#xmlClicked" text="XML" fx:id="xmlFormat" />
+            <CheckMenuItem fx:id="protobufFormat" mnemonicParsing="false" onAction="#protobufClicked" text="Protocol Buffers" />
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
             <MenuItem mnemonicParsing="false" text="About" />
