@@ -18,11 +18,11 @@ public class JsonConverter extends AbstractConverter {
 }*/
 
     public DataContainer convert(String message) {
-        /*Gson gson = new Gson();
+        Gson gson = new Gson();
         Pojo read = gson.fromJson(message, Pojo.class);
         DataContainer container = new DataContainer(read.getAccelerometer(), read.getMagnetometer(), read.getGyroscope());
-        container.setMessage(message);*/
-        double[] accelerometer = new double[3];
+        container.setMessage(message);
+        /*double[] accelerometer = new double[3];
         double[] magnetometer = new double[3];
         double[] gyroscope = new double[3];
         String substringAccelerometer = "\"accelerometer\":[";
@@ -51,7 +51,7 @@ public class JsonConverter extends AbstractConverter {
             }
         } catch (Exception exception) {
         }
-        return new DataContainer(accelerometer, magnetometer, gyroscope);
-        //return container;
+        return new DataContainer(accelerometer, magnetometer, gyroscope);*/
+        return container;
     }
 }

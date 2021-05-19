@@ -13,21 +13,17 @@ import javafx.scene.shape.Box;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
-import ssau.spacegradient.clientapp.client.converter.DataContainer;
 import ssau.spacegradient.dataprocessing.Filter;
 import ssau.spacegradient.dataprocessing.KalmanFilter;
 import ssau.spacegradient.dataprocessing.MadgwickSettings;
 import ssau.spacegradient.dataprocessing.ProcessedData;
 import ssau.spacegradient.clientapp.client.Controller;
 
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.function.Consumer;
 
 @Component
-public class ViewController implements Consumer<ProcessedData>{
+public class ViewController implements Consumer<ProcessedData> {
     private final Controller controller;
-    private static ArrayBlockingQueue<ProcessedData> exchangerProcessed = new ArrayBlockingQueue<>(1);
-    private static ArrayBlockingQueue<DataContainer> exchangerAccepted = new ArrayBlockingQueue<>(1);
     @FXML
     public Box box;
     public TextField ipAddressTextField;
@@ -99,10 +95,8 @@ public class ViewController implements Consumer<ProcessedData>{
                         accelerometerLSB.getText(),
                         magnetometerLSB.getText(),
                         gyroscopeLSB.getText(),
-                        time.getText(),
-                        exchangerProcessed,
-                        exchangerAccepted);
-                controller.startAlgorithm(set);
+                        time.getText());
+                controller.startAlgorithm(this, set);
             } catch (Exception exception) {
                 connStatusLabel.setText(exception.getMessage());
                 startProcessingButton.setSelected(false);
@@ -113,9 +107,10 @@ public class ViewController implements Consumer<ProcessedData>{
         }
     }
 
+
     @Override
     public void accept(ProcessedData data) {
-        Platform.runLater(() -> {
+        /*Platform.runLater(() -> {
             telemetryLabel.setText(data.getRawData().toString());
             double[] q = data.getQ();
             double angle;
@@ -123,7 +118,7 @@ public class ViewController implements Consumer<ProcessedData>{
             Point3D rotationAxis = new Point3D(-q[2], q[3], q[1]);
             rotateBox(angle * 180 / Math.PI, rotationAxis);
            // System.out.println(angle + " " + q[1] + " " + q[2] + " " + q[3]);
-        });
+        });*/
     }
 
     protected final void rotateBox(double angle, Point3D rotationAxis) {

@@ -4,7 +4,7 @@ import ssau.spacegradient.clientapp.client.converter.DataContainer;
 
 import java.util.function.Consumer;
 
-public interface Algorithm extends Runnable {
+public interface Algorithm extends Runnable, Consumer<DataContainer> {
 
     double[] getQuaternion();
 

@@ -7,7 +7,6 @@ import ssau.spacegradient.clientapp.client.converter.DataContainer;
 import java.io.FileWriter;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.function.Consumer;
 
 @Component
@@ -21,8 +20,6 @@ public class Madgwick implements Algorithm {
     private double gyroscopeLSB;//70 mdps/LSB;
     private Filter filter = new Filter();
     private String message;
-    private static ArrayBlockingQueue<ProcessedData> exchanger;
-    private static ArrayBlockingQueue<DataContainer> exchangerRX;
 
     private double[] q_est = new double[]{1, 0, 0, 0};
     private double w_bx, w_by, w_bz;
@@ -55,10 +52,6 @@ public class Madgwick implements Algorithm {
 
     public void setFilter(Filter filter) {
         this.filter = filter;
-    }
-
-    public static void setExchanger(ArrayBlockingQueue<ProcessedData> exchanger) {
-        Madgwick.exchanger = exchanger;
     }
 
     @Override
@@ -210,7 +203,6 @@ public class Madgwick implements Algorithm {
         try {
             while (!Thread.interrupted()) {
                 isAlive = true;
-                accept();
             }
             isAlive = false;
         } catch (Exception exception) {
@@ -219,33 +211,20 @@ public class Madgwick implements Algorithm {
     }
 
 
-    public void accept() {
-        try {
-            if (isAlive) {
-                DataContainer dataContainer = exchangerRX.take();
-                this.data = dataContainer;
-                message = dataContainer.getMessage();
-                calculatePosition(data.getAccelerometer(), data.getMagnetometer(), data.getGyroscope());
-                processedData.setQ(q_est);
-                processedData.setRawData(data);
-                receiveData();
-                // receiveData().subscribe(consumer);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    @Override
+    public void accept(DataContainer dataContainer) {
+        if (isAlive && (consumer != null)) {
+            this.data = dataContainer;
+            message = dataContainer.getMessage();
+            calculatePosition(data.getAccelerometer(), data.getMagnetometer(), data.getGyroscope());
+            processedData.setQ(q_est);
+            processedData.setRawData(data);
+            receiveData().subscribe(consumer);
         }
-
     }
 
-    /*public Flux<ProcessedData> receiveData() {
+    public Flux<ProcessedData> receiveData() {
         return Flux.fromArray(new ProcessedData[]{processedData});
-    }*/
-    public void receiveData() {
-        try {
-            exchanger.put(processedData);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     public void setSettings(MadgwickSettings set) {
@@ -256,8 +235,6 @@ public class Madgwick implements Algorithm {
         this.dt = set.getDt();
         this.beta = set.getBeta();
         this.zeta = set.getZeta();
-        this.exchanger = set.getExchanger();
-        this.exchangerRX = set.getExchangerRX();
     }
 
     public void saveProcessedData() {

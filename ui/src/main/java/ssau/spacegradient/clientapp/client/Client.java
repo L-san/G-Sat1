@@ -24,8 +24,8 @@ public class Client extends Thread {
     public Client() {
         this.ipAddress = "62.77.153.231";
         this.port = 1883;
-        this.topic = "json/realtime";
-        //this.topic = "Received data";
+        //this.topic = "json/realtime";
+        this.topic = "Received data";
         this.converter = new JsonConverter();
     }
 
