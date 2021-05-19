@@ -26,8 +26,7 @@ public class ClientController {
         this.client.setPort(port);
     }
 
-    public void start(Consumer<? super DataContainer> consumer) {
-        this.client.setConsumer(consumer);
+    public void start() {
         this.clientThread = new Thread(client);
         this.clientThread.setDaemon(true);
         this.clientThread.start();

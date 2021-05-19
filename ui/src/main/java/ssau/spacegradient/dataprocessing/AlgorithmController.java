@@ -19,8 +19,7 @@ public class AlgorithmController {
         return algorithm;
     }
 
-    public void start(Consumer<? super ProcessedData> consumer, MadgwickSettings set) {
-        this.algorithm.setConsumer(consumer);
+    public void start(MadgwickSettings set) {
         this.algorithm.setSettings(set);
         this.algorithmThread = new Thread(algorithm);
         this.algorithmThread.setDaemon(true);

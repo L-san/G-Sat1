@@ -11,7 +11,7 @@ import ssau.spacegradient.clientapp.client.Controller;
 @Configuration
 public class Config {
 
-    @Bean
+   /* @Bean
     public Client getClient(){
         return new Client();
     }
@@ -34,5 +34,5 @@ public class Config {
     @Bean
     public Controller getController(ClientController controller, AlgorithmController algorithmController){
         return new Controller(controller,algorithmController);
-    }
+    }*/
 }

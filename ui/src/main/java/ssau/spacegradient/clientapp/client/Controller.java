@@ -26,15 +26,15 @@ public class Controller {
     }
 
     public void startClient() {
-        clientController.start(algorithmController.getAlgorithm());
+        clientController.start();
     }
 
     public void stopClient(){
         clientController.stop();
     }
 
-    public void startAlgorithm(Consumer<? super ProcessedData> consumer, MadgwickSettings set){
-        algorithmController.start(consumer, set);
+    public void startAlgorithm(MadgwickSettings set){
+        algorithmController.start(set);
     }
 
     public void stopAlgorithm(){
