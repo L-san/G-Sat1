@@ -24,8 +24,8 @@ public class Client extends Thread {
     public Client() {
         this.ipAddress = "62.77.153.231";
         this.port = 1883;
-        this.topic = "json/realtime";
-        //this.topic = "Received data";
+        //this.topic = "json/realtime";
+        this.topic = "Received data";
         this.converter = new JsonConverter();
     }
 
@@ -76,17 +76,19 @@ public class Client extends Thread {
     @Override
     public void run() {
         onStart();
-        while (!Thread.interrupted()&&(consumer!=null)) {
-            Message msg = null;
-            try {
-                msg = connection.receive(1200, TimeUnit.MILLISECONDS);
+        try {
+            while (true) {
+                Message msg = null;
+                msg = connection.receive();
                 data = converter.convert(new String(msg.getPayload()));
                 data.setMessage(new String(msg.getPayload()));
                 receive().subscribe(consumer);
-            } catch (Exception ignored) {
+                System.out.println(new String(msg.getPayload()));
             }
+        } catch (Exception ignored) {
         }
     }
+
     public Flux<DataContainer> receive() {
         return Flux.fromArray(new DataContainer[]{data});
     }

@@ -110,7 +110,7 @@ public class ViewController implements Consumer<ProcessedData> {
 
     @Override
     public void accept(ProcessedData data) {
-        Platform.runLater(() -> {
+        /*Platform.runLater(() -> {
             telemetryLabel.setText(data.getRawData().toString());
             double[] q = data.getQ();
             double angle;
@@ -118,7 +118,7 @@ public class ViewController implements Consumer<ProcessedData> {
             Point3D rotationAxis = new Point3D(-q[2], q[3], q[1]);
             rotateBox(angle * 180 / Math.PI, rotationAxis);
            // System.out.println(angle + " " + q[1] + " " + q[2] + " " + q[3]);
-        });
+        });*/
     }
 
     protected final void rotateBox(double angle, Point3D rotationAxis) {
