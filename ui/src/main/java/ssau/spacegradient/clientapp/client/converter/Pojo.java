@@ -1,15 +1,10 @@
 package ssau.spacegradient.clientapp.client.converter;
 
-import net.badata.protobuf.converter.annotation.ProtoClass;
-import net.badata.protobuf.converter.annotation.ProtoField;
-
-//@ProtoClass(ProtocolBuffersConverter.class)
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+@JacksonXmlRootElement(localName = "sendingFile")
 public class Pojo {
-   // @ProtoField
     double[] accelerometer;
-   // @ProtoField
     double[] gyroscope;
-   // @ProtoField
     double[] magnetometer;
 
     public Pojo(double[] accelerometer, double[] gyroscope, double[] magnetometer) {

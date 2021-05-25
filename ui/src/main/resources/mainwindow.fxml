@@ -55,13 +55,10 @@
         <Menu mnemonicParsing="false" text="Extras">
          <CheckMenuItem fx:id="filter" mnemonicParsing="false" onAction="#doFiltering" text="Kalman Filter" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Transmit data" />
-            <MenuItem mnemonicParsing="false" text="Stop transmitting data" />
         </Menu>
         <Menu mnemonicParsing="false" text="Data format">
-            <CheckMenuItem fx:id="jsonFormat" mnemonicParsing="false" onAction="#jsonClicked" text="JSON" />
+            <CheckMenuItem fx:id="jsonFormat" mnemonicParsing="false" onAction="#jsonClicked" selected="true" text="JSON" />
             <CheckMenuItem mnemonicParsing="false" onAction="#xmlClicked" text="XML" fx:id="xmlFormat" />
-            <CheckMenuItem fx:id="protobufFormat" mnemonicParsing="false" onAction="#protobufClicked" text="Protocol Buffers" />
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
             <MenuItem mnemonicParsing="false" text="About" />
@@ -101,7 +98,6 @@
             <Tab text="Current telemetry">
                 <Label fx:id="telemetryLabel" alignment="TOP_LEFT" prefHeight="105.0" prefWidth="495.0" text="No data..." />
             </Tab>
-            <Tab text="Send telemetry to server" />
         </TabPane>
         <TabPane layoutX="404.0" layoutY="523.0" prefHeight="171.0" prefWidth="383.0" tabClosingPolicy="UNAVAILABLE">
             <Tab text="Connection status:">

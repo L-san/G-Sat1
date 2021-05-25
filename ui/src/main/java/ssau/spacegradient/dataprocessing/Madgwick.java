@@ -20,6 +20,7 @@ public class Madgwick implements Algorithm {
     private double gyroscopeLSB;//70 mdps/LSB;
     private Filter filter = new Filter();
     private String message;
+    private String status;
 
     private double[] q_est = new double[]{1, 0, 0, 0};
     private double w_bx, w_by, w_bz;
@@ -78,6 +79,7 @@ public class Madgwick implements Algorithm {
         g = new double[]{z[6], z[7], z[8]};
         data = new DataContainer(a, m, g);
         data.setMessage(message);
+        data.setStatus(status);
         saveProcessedData();
 
         wx = g[0];
@@ -216,6 +218,7 @@ public class Madgwick implements Algorithm {
         // if (isAlive && (consumer != null)) {
         this.data = dataContainer;
         message = dataContainer.getMessage();
+        status = dataContainer.getStatus();
         calculatePosition(data.getAccelerometer(), data.getMagnetometer(), data.getGyroscope());
         processedData.setQ(q_est);
         processedData.setRawData(data);

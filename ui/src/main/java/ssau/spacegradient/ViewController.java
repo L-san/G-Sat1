@@ -5,22 +5,23 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point3D;
-import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
+import ssau.spacegradient.clientapp.client.Controller;
 import ssau.spacegradient.clientapp.client.converter.JsonConverter;
-import ssau.spacegradient.clientapp.client.converter.ProtocolBuffersConverter;
 import ssau.spacegradient.clientapp.client.converter.XmlConverter;
 import ssau.spacegradient.dataprocessing.Filter;
 import ssau.spacegradient.dataprocessing.KalmanFilter;
 import ssau.spacegradient.dataprocessing.MadgwickSettings;
 import ssau.spacegradient.dataprocessing.ProcessedData;
-import ssau.spacegradient.clientapp.client.Controller;
 
 import java.util.function.Consumer;
 
@@ -49,7 +50,6 @@ public class ViewController implements Consumer<ProcessedData> {
 
     public CheckMenuItem filter;
     public CheckMenuItem jsonFormat;
-    public CheckMenuItem protobufFormat;
     public CheckMenuItem xmlFormat;
 
     public ViewController() {
@@ -123,7 +123,7 @@ public class ViewController implements Consumer<ProcessedData> {
             angle = 2 * Math.acos(q[0]);
             Point3D rotationAxis = new Point3D(-q[2], q[3], q[1]);
             rotateBox(angle * 180 / Math.PI, rotationAxis);
-           // System.out.println(angle + " " + q[1] + " " + q[2] + " " + q[3]);
+            // System.out.println(angle + " " + q[1] + " " + q[2] + " " + q[3]);
         });
     }
 
@@ -155,30 +155,15 @@ public class ViewController implements Consumer<ProcessedData> {
     }
 
     public void jsonClicked(ActionEvent actionEvent) {
-        if(!jsonFormat.isSelected()){
-            controller.setConverter(new JsonConverter());
-        }
+        controller.setConverter(new JsonConverter());
         jsonFormat.setSelected(true);
         xmlFormat.setSelected(false);
-        protobufFormat.setSelected(false);
     }
 
     public void xmlClicked(ActionEvent actionEvent) {
-        if(!xmlFormat.isSelected()){
-            controller.setConverter(new XmlConverter());
-        }
+        controller.setConverter(new XmlConverter());
         jsonFormat.setSelected(false);
         xmlFormat.setSelected(true);
-        protobufFormat.setSelected(false);
-    }
-
-    public void protobufClicked(ActionEvent actionEvent) {
-        if(!protobufFormat.isSelected()){
-            controller.setConverter(new ProtocolBuffersConverter());
-        }
-        jsonFormat.setSelected(false);
-        xmlFormat.setSelected(false);
-        protobufFormat.setSelected(true);
     }
 }
 

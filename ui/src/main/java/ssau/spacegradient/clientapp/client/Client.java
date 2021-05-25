@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 
 @Component
 public class Client extends Thread {
-    private String topic;
+    private final String topic;
     private String ipAddress;
     private int port;
     private AbstractConverter converter;
@@ -27,10 +27,6 @@ public class Client extends Thread {
         //this.topic = "json/realtime";
         this.topic = "Received data";
         this.converter = new JsonConverter();
-    }
-
-    public void setTopic(String topic) {
-        this.topic = topic;
     }
 
     public void setIpAddress(String ipAddress) {
@@ -76,19 +72,19 @@ public class Client extends Thread {
     @Override
     public void run() {
         onStart();
-        int i = 1;
-        try {
-            while (true) {
-                Message msg = null;
-                System.out.println(i++);
+        while (true) {
+            Message msg;
+            try {
                 msg = connection.receive(1000, TimeUnit.MILLISECONDS);
                 data = converter.convert(new String(msg.getPayload()));
                 data.setMessage(new String(msg.getPayload()));
-                receive().subscribe(consumer);
                 System.out.println(new String(msg.getPayload()));
                 msg.ack();
+            } catch (Exception ignored) {
+                ignored.printStackTrace();
+                data.setStatus("Invalid data format");
             }
-        } catch (Exception ignored) {
+            receive().subscribe(consumer);
         }
     }
 

@@ -1,19 +1,18 @@
 package ssau.spacegradient.clientapp.client.converter;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import java.io.StringReader;
 
 public class XmlConverter extends AbstractConverter{
 
-    public DataContainer convert(String message) {
-        XmlMapper xmlMapper = new XmlMapper();
-        Pojo read = null;
-        try {
-            read = xmlMapper.readValue(message, Pojo.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        DataContainer container = new DataContainer(read.getAccelerometer(), read.getMagnetometer(), read.getGyroscope());
-        return container;
+    public DataContainer convert(String message) throws JAXBException {
+        SendingFile read;
+        JAXBContext context = JAXBContext.newInstance(SendingFile.class);
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+        StringReader reader = new StringReader(String.valueOf(message));
+        read = (SendingFile) unmarshaller.unmarshal(reader);
+        return new DataContainer(read.getAccelerometer(), read.getMagnetometer(), read.getGyroscope());
     }
 }
