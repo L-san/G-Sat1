@@ -61,7 +61,7 @@
             <CheckMenuItem mnemonicParsing="false" onAction="#xmlClicked" text="XML" fx:id="xmlFormat" />
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
-            <MenuItem mnemonicParsing="false" text="About" />
+            <MenuItem mnemonicParsing="false" text="помощи нет и не будет" />
         </Menu>
     </MenuBar>
     <AnchorPane VBox.vgrow="ALWAYS">
