@@ -215,15 +215,15 @@ public class Madgwick implements Algorithm {
 
     @Override
     public void accept(DataContainer dataContainer) {
-        // if (isAlive && (consumer != null)) {
-        this.data = dataContainer;
-        message = dataContainer.getMessage();
-        status = dataContainer.getStatus();
-        calculatePosition(data.getAccelerometer(), data.getMagnetometer(), data.getGyroscope());
-        processedData.setQ(q_est);
-        processedData.setRawData(data);
-        receiveData().subscribe(consumer);
-        //}
+        if (isAlive && (consumer != null)) {
+            this.data = dataContainer;
+            message = dataContainer.getMessage();
+            status = dataContainer.getStatus();
+            calculatePosition(data.getAccelerometer(), data.getMagnetometer(), data.getGyroscope());
+            processedData.setQ(q_est);
+            processedData.setRawData(data);
+            receiveData().subscribe(consumer);
+        }
     }
 
     public Flux<ProcessedData> receiveData() {

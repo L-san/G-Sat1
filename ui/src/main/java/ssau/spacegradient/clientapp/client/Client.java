@@ -72,7 +72,7 @@ public class Client extends Thread {
     @Override
     public void run() {
         onStart();
-        while (true) {
+        while (!Thread.interrupted()) {
             Message msg;
             try {
                 msg = connection.receive(1000, TimeUnit.MILLISECONDS);
@@ -86,16 +86,18 @@ public class Client extends Thread {
             }
             receive().subscribe(consumer);
         }
+        stopС();
     }
 
     public Flux<DataContainer> receive() {
         return Flux.fromArray(new DataContainer[]{data});
     }
-   /* public void stop() {
+
+    public void stopС() {
         try {
             connection.disconnect();
         } catch (Exception e) {
             System.out.println("Can't disconnect");
         }
-    }*/
+    }
 }
